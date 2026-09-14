@@ -1,4 +1,4 @@
-# Harsh Kumar — Portfolio: Follow the Request 🚀
+# Harsh Kumar - Portfolio: Follow the Request 🚀
 
 > An interactive developer portfolio where you become a request traveling through a distributed backend architecture.
 
