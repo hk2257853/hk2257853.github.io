@@ -9,35 +9,35 @@ import { forwardRef, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import styles from './AutoScaler.module.css';
 
-const PRE_AI = [
-  'Java, Spring Boot, Microservices, SQL',
-  'Kafka, Redis & Distributed Systems',
-  'Low-Level Design & Concurrency',
-  'Algorithms (ICPC Regionalist, CodeChef 1704)',
+const CORE_FUNDAMENTALS = [
+  'System Design: Data consistency, caching & failure modes',
+  'Deep Debugging: Tracing race conditions & performance bottlenecks',
+  'Clean Code: Idiomatic Java/Spring, strict OOP & concurrency',
+  'Algorithmic Thinking: ICPC Regionalist & competitive programming',
 ];
 
-const POST_AI = [
-  'Custom MCP Servers & Windsurf Bridge',
-  'Autonomous AI Agents & API Test Gen',
-  'Hybrid RAG, LangGraph & LLM Tooling',
-  'Delivered 60+ API adoptions in 2 weeks (2x speed)',
+const AI_LEVERAGE = [
+  'Custom Tooling: Building IDE MCP bridges to DBs & internal platforms',
+  'Workflow Automation: Autonomous test generation (100+ API scenarios)',
+  'Parallel Execution: Fast prototyping, evaluation & shipping at 4× velocity',
+  'Precision Steering: Knowing what to automate, how it breaks, and why',
 ];
 
 const PROOF_POINTS = [
   {
+    icon: '🧠',
+    text: 'Fundamentals Judge Correctness: ',
+    highlight: 'Anyone can prompt an LLM. Knowing how distributed systems break prevents shipping fragile architecture.',
+  },
+  {
     icon: '🔧',
-    text: 'Custom MCP Server: Built bridge connecting AI assistants to internal DB & config platform: ',
-    highlight: '20-30% task acceleration over standard AI tools.',
+    text: 'Custom Tooling Over Generic Prompts: ',
+    highlight: 'Engineered custom MCP servers and Chrome extensions from scratch to eliminate engineering toil across team workflows.',
   },
   {
     icon: '🚀',
-    text: 'Automated 100+ API test scenarios & architected 2-phase onboarding utility: ',
-    highlight: 'Reduced client onboarding from weeks to days (30% ahead of estimate).',
-  },
-  {
-    icon: '🧠',
-    text: 'Strong CS Fundamentals (ICPC Regionalist 221 & 9+ hackathons): ',
-    highlight: 'Knowing what to automate, how distributed systems scale, and why.',
+    text: 'Force Multiplier in Production: ',
+    highlight: '1 engineer with deep fundamentals + AI tooling operates with the velocity and output of a full squad.',
   },
 ];
 
@@ -114,8 +114,8 @@ export const AutoScaler = forwardRef<HTMLElement>(
           <div className={styles.componentLabel}>📈 Horizontal Scaling</div>
           <h2 className={styles.sectionTitle}>Scaling Up...</h2>
           <p className={styles.subtitle}>
-            When the load increases, don't break - scale.
-            Pre-AI fundamentals + post-AI leverage = force multiplier.
+            When the load spikes, you don't break — you scale.
+            Deep fundamentals in system design and debugging, multiplied by custom AI tooling.
           </p>
 
           {/* Scaling visualization: 1 pod → 4 pods */}
@@ -141,9 +141,9 @@ export const AutoScaler = forwardRef<HTMLElement>(
           {/* Before / After */}
           <div className={styles.comparisonGrid}>
             <div className={styles.comparisonColumn}>
-              <div className={styles.comparisonTitle}>Pre-AI Foundation</div>
+              <div className={styles.comparisonTitle}>Core Fundamentals</div>
               <div className={styles.comparisonList}>
-                {PRE_AI.map((item, i) => (
+                {CORE_FUNDAMENTALS.map((item, i) => (
                   <div key={i} className={styles.comparisonItem}>
                     <span style={{ color: 'var(--color-text-dim)' }}>▹</span>
                     <span>{item}</span>
@@ -155,9 +155,9 @@ export const AutoScaler = forwardRef<HTMLElement>(
             <div className={styles.comparisonDivider}>→</div>
 
             <div className={styles.comparisonColumn}>
-              <div className={`${styles.comparisonTitle} ${styles.after}`}>Post-AI Multiplier</div>
+              <div className={`${styles.comparisonTitle} ${styles.after}`}>The AI Multiplier</div>
               <div className={styles.comparisonList}>
-                {POST_AI.map((item, i) => (
+                {AI_LEVERAGE.map((item, i) => (
                   <div key={i} className={styles.comparisonItem}>
                     <span style={{ color: 'var(--color-accent)' }}>▸</span>
                     <span>{item}</span>

@@ -9,7 +9,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-import { SoundManager } from './components/effects/SoundManager/SoundManager';
 import { SystemMap } from './components/common/SystemMap/SystemMap';
 import { TeachingMoment } from './components/common/TeachingMoment/TeachingMoment';
 import { GridBackground } from './components/effects/GridBackground/GridBackground';
@@ -87,8 +86,6 @@ export default function App() {
 
   return (
     <div className={styles.app}>
-      {/* Audio Engine */}
-      <SoundManager activeIndex={activeIndex} />
 
       {/* Ambient backgrounds */}
       <GridBackground />

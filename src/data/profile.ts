@@ -16,7 +16,7 @@ export const profile = {
 
   // Rendered as HTTP request headers
   headers: {
-    'Host': 'harsh-kumar.dev',
+    'Host': 'hk2257853.github.io',
     'Method': 'GET /about',
     'Authorization': 'Bearer [software-engineer-backend-ai]',
     'X-Stack': 'Java, Spring Boot, Kafka, Redis, Python',

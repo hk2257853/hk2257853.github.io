@@ -9,7 +9,7 @@ console.log(
   'color: #5cedc8; font-size: 16px; font-weight: bold;'
 );
 console.log(
-  '%cWe should talk. → harsh-kumar.dev',
+  '%cWe should talk. → harshwork474@gmail.com',
   'color: #8892b0; font-size: 12px;'
 );
 

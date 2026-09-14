@@ -16,7 +16,7 @@ const BOOT_LINES = [
   { prefix: '✓', text: 'DNS resolution complete', style: 'success' },
   { prefix: '✓', text: 'TLS handshake established', style: 'success' },
   { prefix: '▸', text: 'composing request packet...', style: 'accent' },
-  { prefix: '▸', text: 'destination: harsh-kumar.dev', style: 'accent' },
+  { prefix: '▸', text: 'destination: hk2257853.github.io', style: 'accent' },
   { prefix: '⚡', text: 'request initiated', style: 'warning' },
 ];
 
