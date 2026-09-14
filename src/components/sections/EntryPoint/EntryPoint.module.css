@@ -1,0 +1,176 @@
+.entryPoint {
+  background: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Terminal boot sequence */
+.terminal {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  max-width: var(--content-width);
+  width: 100%;
+  padding: var(--space-xl);
+}
+
+.terminalLine {
+  opacity: 0;
+  margin-bottom: var(--space-xs);
+  line-height: 1.8;
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.terminalLine.visible {
+  opacity: 1;
+}
+
+.prefix {
+  color: var(--color-text-dim);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.accent {
+  color: var(--color-accent);
+}
+
+.success {
+  color: var(--color-success);
+}
+
+.warning {
+  color: var(--color-warning);
+}
+
+.muted {
+  color: var(--color-text-dim);
+}
+
+/* The packet - glowing orb */
+.packetContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.packet {
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  box-shadow: var(--glow-lg);
+  position: relative;
+}
+
+.packet::before {
+  content: '';
+  position: absolute;
+  inset: -0.5rem;
+  border-radius: var(--radius-full);
+  background: radial-gradient(circle, hsla(175, 80%, 55%, 0.15) 0%, transparent 70%);
+  animation: breathe 3s ease-in-out infinite;
+}
+
+.packet::after {
+  content: '';
+  position: absolute;
+  inset: -1.25rem;
+  border-radius: var(--radius-full);
+  border: 0.0625rem solid hsla(175, 80%, 55%, 0.1);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Name reveal */
+.nameReveal {
+  position: absolute;
+  bottom: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0;
+  width: 90%;
+}
+
+.nameText {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.nameHighlight {
+  color: var(--color-accent);
+  font-weight: var(--weight-medium);
+}
+
+/* Scroll indicator */
+.scrollCue {
+  position: absolute;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  opacity: 0;
+}
+
+.scrollText {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  letter-spacing: 0.15em;
+}
+
+.scrollArrow {
+  width: 0.0625rem;
+  height: 1.5rem;
+  background: linear-gradient(to bottom, var(--color-accent-dim), transparent);
+  position: relative;
+}
+
+.scrollArrow::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0.375rem;
+  height: 0.375rem;
+  border-right: 0.0625rem solid var(--color-accent-dim);
+  border-bottom: 0.0625rem solid var(--color-accent-dim);
+  transform: translateX(-50%) rotate(45deg);
+  animation: fadeInDown 1.5s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  .terminal {
+    font-size: var(--text-xs);
+    padding: var(--space-lg);
+  }
+
+  .nameReveal {
+    bottom: 20%;
+  }
+}
+
+@media (max-width: 480px) {
+  .terminal {
+    padding: var(--space-md);
+  }
+
+  .nameReveal {
+    bottom: 15%;
+  }
+}

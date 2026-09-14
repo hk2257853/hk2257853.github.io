@@ -1,0 +1,127 @@
+/* ============================================
+   Design System Tokens
+   The single source of truth for all visual values.
+   ============================================ */
+
+:root {
+  /* === Colors - Dark UI with cyan-teal accent === */
+  --color-bg:           hsl(225, 25%, 6%);
+  --color-surface:      hsl(225, 20%, 10%);
+  --color-surface-alt:  hsl(225, 18%, 14%);
+  --color-surface-hover: hsl(225, 18%, 18%);
+
+  --color-text:         hsl(220, 20%, 88%);
+  --color-text-muted:   hsl(220, 15%, 55%);
+  --color-text-dim:     hsl(220, 10%, 35%);
+
+  --color-accent:       hsl(175, 80%, 55%);
+  --color-accent-glow:  hsl(175, 90%, 65%);
+  --color-accent-dim:   hsl(175, 40%, 30%);
+  --color-accent-bg:    hsla(175, 80%, 55%, 0.08);
+
+  --color-success:      hsl(145, 65%, 50%);
+  --color-warning:      hsl(35, 90%, 60%);
+  --color-error:        hsl(0, 70%, 55%);
+
+  --color-border:       hsl(225, 15%, 18%);
+  --color-border-subtle: hsl(225, 12%, 14%);
+
+  /* === Typography === */
+  --font-primary:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:     'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg:   1.25rem;    /* 20px */
+  --text-xl:   clamp(1.25rem, 1.1rem + 0.75vw, 1.75rem);   /* Fluid: 20px to 28px */
+  --text-2xl:  clamp(1.625rem, 1.3rem + 1.6vw, 2.5rem);     /* Fluid: 26px to 40px */
+  --text-3xl:  clamp(2.125rem, 1.625rem + 2.5vw, 3.5rem);   /* Fluid: 34px to 56px */
+  --text-2xs:  clamp(0.5625rem, 0.5rem + 0.3vw, 0.6875rem); /* Fluid: 9px to 11px */
+
+  --leading-tight:  1.2;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.8;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* === Spacing === */
+  --space-2xs: 0.125rem;  /* 2px */
+  --space-xs:  0.25rem;   /* 4px */
+  --space-sm:  0.5rem;    /* 8px */
+  --space-md:  1rem;      /* 16px */
+  --space-lg:  1.5rem;    /* 24px */
+  --space-xl:  2.5rem;    /* 40px */
+  --space-2xl: 4rem;      /* 64px */
+  --space-3xl: 6rem;      /* 96px */
+
+  /* === Sizing Constants === */
+  --content-width: min(45rem, 100%);
+  --dot-size-sm: 0.375rem;    /* 6px */
+  --dot-size-md: 0.5rem;      /* 8px */
+  --dot-size-lg: 0.75rem;     /* 12px */
+  --icon-size-sm: 1.25rem;    /* 20px */
+
+  /* === Animation === */
+  --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:  cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
+
+  --duration-fast:   150ms;
+  --duration-normal: 300ms;
+  --duration-slow:   600ms;
+  --duration-slower: 1000ms;
+
+  /* === Effects === */
+  --glow-sm:  0 0 0.5rem  hsla(175, 90%, 65%, 0.4);
+  --glow-md:  0 0 1.25rem hsla(175, 90%, 65%, 0.3);
+  --glow-lg:  0 0 2.5rem hsla(175, 90%, 65%, 0.2);
+  --glow-xl:  0 0 3.75rem hsla(175, 90%, 65%, 0.15), 0 0 7.5rem hsla(175, 90%, 65%, 0.05);
+
+  --shadow-sm: 0 0.0625rem 0.1875rem hsla(225, 50%, 4%, 0.5);
+  --shadow-md: 0 0.25rem 0.75rem hsla(225, 50%, 4%, 0.6);
+  --shadow-lg: 0 0.5rem 1.875rem hsla(225, 50%, 4%, 0.7);
+
+  /* === Layout === */
+  --max-width: 75rem; /* 1200px */
+  --section-min-height: 100vh;
+  --section-padding: var(--space-2xl);
+  --header-height: 3.5rem;
+  --mobile-header-height: 3.5rem;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* === Borders === */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* === Z-index scale === */
+  --z-base: 0;
+  --z-above: 10;
+  --z-overlay: 100;
+  --z-modal: 200;
+  --z-system-map: 300;
+  --z-packet: 400;
+  --z-toast: 500;
+}
+
+/* === Responsive token overrides === */
+@media (max-width: 768px) {
+  :root {
+    --section-padding: var(--space-xl) var(--space-md);
+    --header-height: var(--mobile-header-height);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --section-padding: var(--space-lg) var(--space-sm);
+  }
+}

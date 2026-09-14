@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backend Request Journey</title>
+  <style>
+    :root {
+      --bg: #060816;
+      --panel: rgba(14, 18, 34, 0.88);
+      --line: rgba(255,255,255,0.08);
+      --text: #eef3ff;
+      --muted: #98a6c5;
+      --blue: #72a8ff;
+      --green: #6ff0c2;
+      --purple: #b78cff;
+      --danger: #ff7f9f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(114,168,255,.18), transparent 22%),
+        radial-gradient(circle at top right, rgba(183,140,255,.12), transparent 18%),
+        linear-gradient(180deg, #04050c, #08111e 50%, #04050c);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .22;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
+    }
+
+    .wrap {
+      width: min(1400px, calc(100% - 32px));
+      margin: auto;
+      padding: 24px 0 60px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.03);
+      backdrop-filter: blur(20px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .pulse {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 20px rgba(111,240,194,.8);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      50% { transform: scale(1.3); opacity: .7; }
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    }
+
+    .sidebar {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      width: fit-content;
+      color: var(--muted);
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: .9;
+      margin: 0;
+      letter-spacing: -.05em;
+    }
+
+    .lead {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .controls {
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .slider-wrap {
+      display: grid;
+      gap: 8px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--green);
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .mini {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .mini b {
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+    }
+
+    .mini span {
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .diagram {
+      position: relative;
+      min-height: 900px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at center, rgba(114,168,255,.08), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    }
+
+    .title {
+      position: absolute;
+      top: 28px;
+      left: 28px;
+      z-index: 10;
+    }
+
+    .title h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+
+    .title p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .node {
+      position: absolute;
+      width: 180px;
+      min-height: 110px;
+      padding: 18px;
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(16,20,38,.96), rgba(9,12,22,.82));
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      z-index: 5;
+      transition: .25s ease;
+      cursor: pointer;
+    }
+
+    .node:hover, .node.active {
+      transform: translateY(-6px) scale(1.03);
+      border-color: rgba(114,168,255,.35);
+      box-shadow: 0 0 0 1px rgba(114,168,255,.18) inset, 0 30px 80px rgba(0,0,0,.45);
+    }
+
+    .node .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(111,240,194,.8);
+    }
+
+    .node small {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: .72rem;
+    }
+
+    .node strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .node p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: .92rem;
+    }
+
+    .gateway { left: 80px; top: 320px; }
+    .lb { left: 360px; top: 320px; }
+    .svc1 { left: 700px; top: 140px; }
+    .svc2 { left: 700px; top: 320px; }
+    .svc3 { left: 700px; top: 500px; }
+    .redis { left: 1020px; top: 180px; }
+    .kafka { left: 1020px; top: 380px; }
+    .db { left: 1020px; top: 610px; }
+
+    .line {
+      position: absolute;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(114,168,255,.8), rgba(111,240,194,.8), transparent);
+      transform-origin: left center;
+      opacity: .9;
+      z-index: 1;
+      filter: drop-shadow(0 0 10px rgba(114,168,255,.4));
+    }
+
+    .packet {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), white);
+      box-shadow: 0 0 30px rgba(111,240,194,.9);
+      z-index: 8;
+      top: 360px;
+      left: 150px;
+      transition: all .9s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .explain {
+      position: absolute;
+      right: 28px;
+      top: 28px;
+      width: 340px;
+      padding: 24px;
+      border-radius: 26px;
+      background: rgba(7,10,20,.9);
+      border: 1px solid rgba(255,255,255,.08);
+      z-index: 10;
+      backdrop-filter: blur(18px);
+    }
+
+    .explain h3 {
+      margin: 0 0 12px;
+      font-size: 1.4rem;
+    }
+
+    .explain p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .footer-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .metric b {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    @media (max-width: 1200px) {
+      .hero { grid-template-columns: 1fr; }
+      .diagram { min-height: 1200px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar panel">
+      <div class="brand">
+        <div class="pulse"></div>
+        HARSH K / BACKEND REQUEST JOURNEY
+      </div>
+      <div style="color:var(--muted)">Trace a request through the system</div>
+    </div>
+
+    <section class="hero">
+      <aside class="panel sidebar">
+        <div>
+          <div class="badge">Interactive Distributed System</div>
+          <h1>Every request has a journey.</h1>
+        </div>
+
+        <p class="lead">
+          This portfolio turns backend architecture into an explorable world. Instead of scrolling through sections, the user follows a request through gateways, services, Redis, Kafka, and databases.
+        </p>
+
+        <div class="controls">
+          <div class="card">
+            <strong>Inject Traffic</strong>
+            <div class="slider-wrap">
+              <span id="trafficText" style="color:var(--muted)">1.2K req/s</span>
+              <input id="traffic" type="range" min="1" max="100" value="28">
+            </div>
+          </div>
+
+          <div class="card">
+            <strong>Failure Modes</strong>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="mode" data-mode="normal">Normal</button>
+              <button class="mode" data-mode="redis">Redis Down</button>
+              <button class="mode" data-mode="traffic">Traffic Spike</button>
+            </div>
+          </div>
+
+          <div class="status-grid">
+            <div class="mini">
+              <b id="pods">4</b>
+              <span>Active Pods</span>
+            </div>
+            <div class="mini">
+              <b id="latency">24ms</b>
+              <span>Latency</span>
+            </div>
+            <div class="mini">
+              <b id="cache">HOT</b>
+              <span>Redis Cache</span>
+            </div>
+            <div class="mini">
+              <b id="status">ONLINE</b>
+              <span>System State</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel diagram">
+        <div class="title">
+          <h2>Live Architecture Map</h2>
+          <p>Click nodes to understand the system through analogy.</p>
+        </div>
+
+        <div class="explain" id="explain">
+          <h3>API Gateway</h3>
+          <p>
+            Every system needs an entry point. This is where requests arrive and where the portfolio introduces you.
+          </p>
+
+          <div class="footer-metrics">
+            <div class="metric"><b>1704</b><span>CodeChef</span></div>
+            <div class="metric"><b>2x</b><span>Hackathons</span></div>
+            <div class="metric"><b>200+</b><span>Solved</span></div>
+            <div class="metric"><b>Java</b><span>Backend</span></div>
+          </div>
+        </div>
+
+        <div class="line" style="left:240px;top:375px;width:150px"></div>
+        <div class="line" style="left:520px;top:375px;width:210px;transform:rotate(-28deg)"></div>
+        <div class="line" style="left:520px;top:375px;width:190px"></div>
+        <div class="line" style="left:520px;top:375px;width:210px;transform:rotate(28deg)"></div>
+        <div class="line" style="left:880px;top:230px;width:170px"></div>
+        <div class="line" style="left:880px;top:410px;width:170px"></div>
+        <div class="line" style="left:880px;top:590px;width:170px"></div>
+
+        <div class="packet" id="packet"></div>
+
+        <div class="node gateway active" data-title="API Gateway" data-text="Every request enters through the gateway. This is the perfect analogy for your introduction section.">
+          <div class="top"><small>Entry</small><div class="dot"></div></div>
+          <strong>Gateway</strong>
+          <p>Let's begin.</p>
+        </div>
+
+        <div class="node lb" data-title="Load Balancer" data-text="Good systems distribute pressure intelligently. Traffic gets routed dynamically across services.">
+          <div class="top"><small>Routing</small><div class="dot"></div></div>
+          <strong>Load Balancer</strong>
+          <p>Distribute requests.</p>
+        </div>
+
+        <div class="node svc1" data-title="AI Service" data-text="One project becomes one service. The user explores your work through architecture modules.">
+          <div class="top"><small>Project</small><div class="dot"></div></div>
+          <strong>AI Service</strong>
+          <p>AI workflows & tools.</p>
+        </div>
+
+        <div class="node svc2" data-title="API Orchestrator" data-text="This can showcase backend systems, integrations, orchestration, APIs, and production logic.">
+          <div class="top"><small>Project</small><div class="dot"></div></div>
+          <strong>API Service</strong>
+          <p>Backend orchestration.</p>
+        </div>
+
+        <div class="node svc3" data-title="Load Test Engine" data-text="Perfect place to visually demonstrate scaling, stress testing, and observability.">
+          <div class="top"><small>Project</small><div class="dot"></div></div>
+          <strong>Load Service</strong>
+          <p>Scale & stress testing.</p>
+        </div>
+
+        <div class="node redis" data-title="Redis Cache" data-text="Without cache, requests travel slowly to the database. With Redis, responses become nearly instant.">
+          <div class="top"><small>Speed Layer</small><div class="dot"></div></div>
+          <strong>Redis</strong>
+          <p>Get data quick.</p>
+        </div>
+
+        <div class="node kafka" data-title="Kafka Events" data-text="Some systems communicate asynchronously. Events continue flowing without blocking the request.">
+          <div class="top"><small>Async</small><div class="dot"></div></div>
+          <strong>Kafka</strong>
+          <p>Msg sent. Msg received.</p>
+        </div>
+
+        <div class="node db" data-title="Database Core" data-text="This becomes your memory vault. Achievements, history, metrics, and experience live here.">
+          <div class="top"><small>Storage</small><div class="dot"></div></div>
+          <strong>Database</strong>
+          <p>Everything remembered.</p>
+        </div>
+      </section>
+    </section>
+  </div>
+
+  <script>
+    const explain = document.getElementById('explain');
+    const nodes = document.querySelectorAll('.node');
+    const packet = document.getElementById('packet');
+    const traffic = document.getElementById('traffic');
+
+    const trafficText = document.getElementById('trafficText');
+    const pods = document.getElementById('pods');
+    const latency = document.getElementById('latency');
+    const cache = document.getElementById('cache');
+    const status = document.getElementById('status');
+
+    const packetPositions = {
+      gateway: { left: '150px', top: '360px' },
+      lb: { left: '430px', top: '360px' },
+      svc1: { left: '770px', top: '180px' },
+      svc2: { left: '770px', top: '360px' },
+      svc3: { left: '770px', top: '540px' },
+      redis: { left: '1090px', top: '220px' },
+      kafka: { left: '1090px', top: '420px' },
+      db: { left: '1090px', top: '650px' },
+    };
+
+    nodes.forEach(node => {
+      node.addEventListener('click', () => {
+        nodes.forEach(n => n.classList.remove('active'));
+        node.classList.add('active');
+
+        explain.innerHTML = `
+          <h3>${node.dataset.title}</h3>
+          <p>${node.dataset.text}</p>
+
+          <div class="footer-metrics">
+            <div class="metric"><b>Live</b><span>System</span></div>
+            <div class="metric"><b>Fast</b><span>Routing</span></div>
+            <div class="metric"><b>Scale</b><span>Ready</span></div>
+            <div class="metric"><b>Cloud</b><span>Native</span></div>
+          </div>
+        `;
+
+        const cls = [...node.classList].find(c => packetPositions[c]);
+        if (cls) {
+          packet.style.left = packetPositions[cls].left;
+          packet.style.top = packetPositions[cls].top;
+        }
+      });
+    });
+
+    traffic.addEventListener('input', () => {
+      const val = Number(traffic.value);
+
+      const req = val < 20
+        ? `${val * 40} req/s`
+        : val < 70
+        ? `${val * 120} req/s`
+        : `${val * 1000} req/s`;
+
+      trafficText.innerText = req;
+
+      pods.innerText = val < 30 ? 2 : val < 60 ? 4 : val < 85 ? 8 : 16;
+      latency.innerText = val < 60 ? '24ms' : val < 85 ? '42ms' : '91ms';
+      cache.innerText = val < 80 ? 'HOT' : 'STRAIN';
+      status.innerText = val < 85 ? 'ONLINE' : 'AUTOSCALING';
+    });
+
+    document.querySelectorAll('.mode').forEach(btn => {
+      btn.style.cssText = 'padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:white;cursor:pointer';
+
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.mode;
+
+        if (mode === 'redis') {
+          cache.innerText = 'DOWN';
+          latency.innerText = '182ms';
+          status.innerText = 'DEGRADED';
+          explain.innerHTML = `
+            <h3>Redis Failure</h3>
+            <p>
+              Cache is unavailable. Requests now travel all the way to the database, increasing latency dramatically.
+              The user FEELS the difference visually.
+            </p>
+          `;
+        }
+
+        if (mode === 'traffic') {
+          pods.innerText = '16';
+          latency.innerText = '71ms';
+          status.innerText = 'AUTOSCALING';
+          explain.innerHTML = `
+            <h3>Traffic Spike</h3>
+            <p>
+              Incoming traffic surged. Additional pods spun up automatically to absorb the pressure.
+            </p>
+          `;
+        }
+
+        if (mode === 'normal') {
+          cache.innerText = 'HOT';
+          latency.innerText = '24ms';
+          status.innerText = 'ONLINE';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

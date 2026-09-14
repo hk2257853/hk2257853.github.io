@@ -1,0 +1,6 @@
+Next steps:
+- check if the site is proper on laptop and phone
+- [x] optimise: file/resources sizes (removed Howler & dead audio/SVGs, synthesized Web Audio tick, optimized favicon, parallelized fonts, configured vendor chunking)
+- final content fix
+- deploy and send for a review to bois
+- linkedin post - last week of sept or 1st week of oct

@@ -1,0 +1,207 @@
+.systemMap {
+  position: fixed;
+  right: var(--space-lg);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: var(--z-system-map);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* The connecting line between nodes */
+.track {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0.125rem;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  z-index: 0;
+}
+
+/* Progress fill along the track */
+.trackProgress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--color-accent);
+  border-radius: var(--radius-full);
+  transition: height var(--duration-normal) var(--ease-out);
+  box-shadow: var(--glow-sm);
+}
+
+.node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.node:hover {
+  transform: scale(1.1);
+}
+
+.dot {
+  width: var(--dot-size-lg);
+  height: var(--dot-size-lg);
+  border-radius: var(--radius-full);
+  border: 0.125rem solid var(--color-border);
+  background: var(--color-bg);
+  transition: all var(--duration-normal) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.dot.active {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  box-shadow: var(--glow-sm);
+}
+
+.dot.visited {
+  border-color: var(--color-accent-dim);
+  background: var(--color-accent-dim);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-0.25rem);
+  transition: all var(--duration-normal) var(--ease-out);
+  pointer-events: none;
+  position: absolute;
+  right: calc(100% + var(--space-sm));
+}
+
+.node:hover .label,
+.node.active .label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.node.active .label {
+  color: var(--color-accent);
+}
+
+/* Mobile: horizontal bar at top */
+@media (max-width: 768px) {
+  .systemMap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    height: var(--mobile-header-height);
+    bottom: auto;
+    transform: none;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 var(--space-md);
+    background: hsla(225, 25%, 6%, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 0.0625rem solid var(--color-border-subtle);
+    gap: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: pan-x;
+    box-sizing: border-box;
+    mask-image: linear-gradient(to right, transparent 0, black 1rem, black calc(100% - 1rem), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 1rem, black calc(100% - 1rem), transparent 100%);
+  }
+
+  .systemMap::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide the absolute-positioned vertical track */
+  .track {
+    display: none;
+  }
+
+  .trackProgress {
+    display: none;
+  }
+
+  .node {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xs) 0.625rem;
+    flex-shrink: 0;
+    min-width: 4.25rem;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .node.active {
+    background: hsla(175, 80%, 55%, 0.07);
+  }
+
+  /* Per-node line segment - connects all dots across the full scroll width */
+  .node::before {
+    content: '';
+    position: absolute;
+    top: calc(var(--space-xs) + var(--dot-size-md) / 2);
+    left: 0;
+    right: 0;
+    height: 0.0625rem;
+    background: var(--color-border);
+    transform: translateY(-50%);
+    z-index: 0;
+  }
+
+  /* First node: line only extends from dot center to the right */
+  .node:first-child::before {
+    left: 50%;
+  }
+
+  /* Last node: line only extends from dot center to the left */
+  .node:last-child::before {
+    right: 50%;
+  }
+
+  .dot {
+    width: var(--dot-size-md);
+    height: var(--dot-size-md);
+    position: relative;
+    z-index: 1;
+  }
+
+  .label {
+    position: static;
+    opacity: 0.5;
+    transform: translateY(0);
+    font-size: var(--text-2xs);
+    text-align: center;
+    color: var(--color-text-dim);
+    margin-top: 0.1875rem;
+    pointer-events: auto;
+    white-space: nowrap;
+    transition: color var(--duration-fast), opacity var(--duration-fast);
+  }
+
+  .node.active .label {
+    opacity: 1;
+    color: var(--color-accent);
+    font-weight: var(--weight-medium);
+  }
+}

@@ -1,0 +1,439 @@
+/* ============================================
+   LandingPage - Orbital Architecture Diagram
+   ============================================ */
+
+.landing {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-bg);
+  box-sizing: border-box;
+}
+
+/* Radial glow emanating from center */
+.landing::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(50rem, 100%);
+  height: min(50rem, 100%);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    hsla(175, 80%, 55%, 0.06) 0%,
+    hsla(175, 80%, 55%, 0.02) 35%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.landingInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 3.5vh, 2.5rem);
+  width: 100%;
+  max-width: 100%;
+  padding: var(--space-md);
+  box-sizing: border-box;
+}
+
+/* ── Title area ── */
+.titleBlock {
+  text-align: center;
+  opacity: 0;
+  margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+}
+
+.name {
+  font-size: clamp(1.85rem, 3.8vw + 0.8rem, 3.75rem);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.03em;
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.subtitle {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6875rem, 1.2vw + 0.35rem, var(--text-sm));
+  color: var(--color-text-muted);
+  letter-spacing: clamp(0.08em, 1vw, 0.18em);
+  text-transform: uppercase;
+  margin-top: var(--space-xs);
+  padding: 0 var(--space-xs);
+}
+
+/* ── Orbital diagram container ── */
+.orbitContainer {
+  position: relative;
+  --orbit-size: clamp(23rem, 46vh, 32.5rem);
+  width: var(--orbit-size);
+  height: var(--orbit-size);
+  flex-shrink: 0;
+  transition: width var(--duration-normal), height var(--duration-normal);
+}
+
+/* ── SVG connection layer ── */
+.connectionsSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.connectionLine {
+  fill: none;
+  stroke: hsla(175, 80%, 55%, 0.15);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+  opacity: 0;
+}
+
+.connectionLineGlow {
+  fill: none;
+  stroke: hsla(175, 80%, 55%, 0.06);
+  stroke-width: 6;
+  filter: blur(0.1875rem);
+  opacity: 0;
+}
+
+/* Data packet - small glowing circle traveling along paths */
+.dataPacket {
+  fill: var(--color-accent);
+  filter: drop-shadow(0 0 0.375rem hsla(175, 90%, 65%, 0.8));
+}
+
+/* ── Architecture nodes ── */
+.nodeWrapper {
+  position: absolute;
+  z-index: 2;
+  opacity: 0;
+  transform: scale(0.7);
+}
+
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  padding: clamp(0.375rem, 1vw, 1rem) clamp(0.5rem, 1.5vw, 1.375rem);
+  border-radius: var(--radius-xl);
+  background: rgba(14, 18, 34, 0.85);
+  border: 0.0625rem solid hsla(175, 80%, 55%, 0.12);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
+  transition:
+    border-color var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
+  cursor: default;
+  text-align: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.node:hover {
+  border-color: hsla(175, 80%, 55%, 0.35);
+  box-shadow:
+    0 0 0 0.0625rem hsla(175, 80%, 55%, 0.08) inset,
+    0 0.5rem 2rem rgba(0, 0, 0, 0.3);
+  transform: translateY(-0.1875rem);
+}
+
+.nodeIcon {
+  font-size: clamp(0.9rem, 0.75rem + 0.5vw, 1.3rem);
+  line-height: 1;
+}
+
+.nodeLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.nodeStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.3125rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-text-dim);
+  letter-spacing: 0.04em;
+}
+
+.statusDot {
+  width: 0.3125rem;
+  height: 0.3125rem;
+  border-radius: var(--radius-full);
+  background: var(--color-success);
+  box-shadow: 0 0 0.5rem hsla(145, 65%, 50%, 0.6);
+  animation: statusPulse 2.5s ease-in-out infinite;
+}
+
+/* Node breathing animation - applied after entrance */
+.nodeBreathing {
+  animation: nodeBreathe 4s ease-in-out infinite;
+}
+
+.nodeBreathing:nth-child(2) { animation-delay: 0.6s; }
+.nodeBreathing:nth-child(3) { animation-delay: 1.2s; }
+.nodeBreathing:nth-child(4) { animation-delay: 1.8s; }
+.nodeBreathing:nth-child(5) { animation-delay: 2.4s; }
+.nodeBreathing:nth-child(6) { animation-delay: 3.0s; }
+
+/* ── Center CTA ── */
+.ctaWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pulse rings behind the button */
+.ctaPulseRing {
+  position: absolute;
+  --ring-size: 7.5rem; /* 120px */
+  width: var(--ring-size);
+  height: var(--ring-size);
+  border-radius: var(--radius-full);
+  border: 0.0625rem solid hsla(175, 80%, 55%, 0.1);
+  animation: ctaPulse 3s ease-out infinite;
+  pointer-events: none;
+  opacity: 0;
+  transition: width var(--duration-normal), height var(--duration-normal);
+}
+
+.ctaPulseRing:nth-child(2) {
+  width: calc(var(--ring-size) * 1.25);
+  height: calc(var(--ring-size) * 1.25);
+  animation-delay: 1s;
+}
+
+.ctaPulseRing:nth-child(3) {
+  width: calc(var(--ring-size) * 1.5);
+  height: calc(var(--ring-size) * 1.5);
+  animation-delay: 2s;
+}
+
+.ctaButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.45rem 1.125rem;
+  border: 0.0625rem solid hsla(175, 80%, 55%, 0.35);
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    135deg,
+    hsla(175, 80%, 55%, 0.12),
+    hsla(175, 80%, 55%, 0.04)
+  );
+  backdrop-filter: blur(1rem);
+  -webkit-backdrop-filter: blur(1rem);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.ctaButton:hover {
+  border-color: hsla(175, 80%, 55%, 0.6);
+  background: linear-gradient(
+    135deg,
+    hsla(175, 80%, 55%, 0.2),
+    hsla(175, 80%, 55%, 0.08)
+  );
+  box-shadow: var(--glow-md);
+  transform: scale(1.05);
+}
+
+.ctaButton:active {
+  transform: scale(0.97);
+}
+
+.ctaArrow {
+  display: inline-block;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.ctaButton:hover .ctaArrow {
+  transform: translateX(0.25rem);
+}
+
+/* ── Bottom tagline ── */
+.tagline {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  letter-spacing: 0.12em;
+  opacity: 0;
+  text-align: center;
+  margin-top: clamp(1rem, 2.5vh, 2rem);
+}
+
+/* ============================================
+   Keyframes
+   ============================================ */
+
+@keyframes nodeBreathe {
+  0%, 100% {
+    transform: scale(1);
+    border-color: hsla(175, 80%, 55%, 0.12);
+  }
+  50% {
+    transform: scale(1.03);
+    border-color: hsla(175, 80%, 55%, 0.22);
+  }
+}
+
+@keyframes ctaPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes dashFlow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+/* ============================================
+   Responsive (Desktop to Mobile Cascade)
+   ============================================ */
+
+@media (max-width: 900px) {
+  .orbitContainer {
+    --orbit-size: clamp(21rem, 45vh, 26rem);
+  }
+
+  .node {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .nodeLabel {
+    font-size: var(--text-xs);
+  }
+
+  .ctaPulseRing {
+    --ring-size: 6.5rem;
+  }
+
+  .ctaButton {
+    padding: 0.4rem 0.95rem;
+    font-size: 0.6875rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .landing {
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-md);
+  }
+
+  .landingInner {
+    gap: clamp(1.25rem, 3vh, 2rem);
+  }
+
+  .titleBlock {
+    margin-bottom: 0.5rem;
+  }
+
+  .tagline {
+    margin-top: 0.75rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .orbitContainer {
+    --orbit-size: min(21.25rem, 88vw); /* 340px max on mobile */
+  }
+
+  .node {
+    padding: 0.375rem 0.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  .nodeIcon {
+    font-size: 1.05rem;
+  }
+
+  .nodeLabel {
+    font-size: 0.625rem; /* 10px */
+    letter-spacing: 0.04em;
+  }
+
+  .nodeStatus {
+    display: none;
+  }
+
+  .ctaPulseRing {
+    --ring-size: 5.5rem;
+  }
+
+  .ctaButton {
+    min-height: 2.15rem;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (max-width: 380px) {
+  .orbitContainer {
+    --orbit-size: min(19rem, 92vw);
+  }
+
+  .node {
+    padding: 0.25rem 0.375rem;
+  }
+
+  .nodeLabel {
+    font-size: 0.5625rem; /* 9px */
+  }
+
+  .ctaPulseRing {
+    --ring-size: 4.5rem;
+  }
+
+  .ctaButton {
+    min-height: 1.875rem;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.625rem;
+  }
+}

@@ -1,0 +1,217 @@
+.response {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--section-padding);
+  position: relative;
+}
+
+.responseInner {
+  max-width: var(--content-width);
+  width: 100%;
+}
+
+.componentLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: var(--space-sm);
+  opacity: 0;
+}
+
+.statusLine {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-success);
+  margin-bottom: var(--space-xl);
+  opacity: 0;
+}
+
+.statusCode {
+  color: var(--color-success);
+}
+
+.statusText {
+  color: var(--color-text);
+  margin-left: var(--space-sm);
+}
+
+/* Response block - formatted like HTTP response */
+.responseBlock {
+  background: var(--color-surface);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--space-xl);
+  opacity: 0;
+  transform: translateY(0.9375rem);
+}
+
+.responseBlockTitle {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-surface-alt);
+  border-bottom: 0.0625rem solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.responseHeaders {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 0.0625rem solid var(--color-border);
+}
+
+.responseHeaderRow {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-2xs) 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.rhKey {
+  color: var(--color-text-dim);
+  min-width: 8.125rem;
+  flex-shrink: 0;
+}
+
+.rhValue {
+  color: var(--color-text-muted);
+}
+
+.rhValue.accent {
+  color: var(--color-accent);
+}
+
+/* Response body - JSON-like */
+.responseBody {
+  padding: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.jsonBrace {
+  color: var(--color-text-dim);
+}
+
+.jsonKey {
+  color: var(--color-text-muted);
+  margin-left: var(--space-lg);
+}
+
+.jsonValue {
+  color: var(--color-accent);
+}
+
+.jsonValueLink {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: opacity var(--duration-fast);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.jsonValueLink:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* CTA */
+.ctaBlock {
+  text-align: center;
+  opacity: 0;
+}
+
+.ctaText {
+  font-size: var(--text-sm);
+  color: var(--color-text-dim);
+  margin-bottom: var(--space-md);
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  background: transparent;
+  border: 0.0625rem solid var(--color-accent);
+  border-radius: var(--radius-full);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.ctaButton:hover {
+  background: var(--color-accent-bg);
+  box-shadow: var(--glow-sm);
+}
+
+/* Response time */
+.responseTime {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-dim);
+  text-align: center;
+  margin-top: var(--space-xl);
+  opacity: 0;
+}
+
+.timeValue {
+  color: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+  .responseHeaderRow {
+    gap: var(--space-sm);
+  }
+
+  .rhKey {
+    min-width: 6.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responseHeaderRow {
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  .rhKey {
+    min-width: auto;
+  }
+
+  .responseHeaders {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .responseBody {
+    padding: var(--space-md);
+    font-size: var(--text-xs);
+    line-height: 1.6;
+  }
+
+  .jsonKey {
+    margin-left: var(--space-sm);
+  }
+
+  .ctaButton {
+    min-height: 3rem;
+    padding: var(--space-sm) var(--space-lg);
+    width: 100%;
+    max-width: 18rem;
+  }
+}

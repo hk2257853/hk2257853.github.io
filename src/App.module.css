@@ -1,0 +1,13 @@
+.app {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* Add top padding on mobile for the fixed system map bar */
+@media (max-width: 768px) {
+  .app {
+    padding-top: calc(var(--mobile-header-height) + var(--safe-area-top));
+  }
+}
