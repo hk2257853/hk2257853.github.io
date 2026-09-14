@@ -20,13 +20,6 @@ export const SECTIONS: SectionMeta[] = [
     teachingMoment: 'The blueprint of how a backend application is built.',
   },
   {
-    id: 'entry-point',
-    label: 'Entry Point',
-    component: 'DNS / Client',
-    icon: '🌑',
-    teachingMoment: 'Every journey on the internet starts with a request: your browser asks a server for information.',
-  },
-  {
     id: 'api-gateway',
     label: 'API Gateway',
     component: 'API Gateway',

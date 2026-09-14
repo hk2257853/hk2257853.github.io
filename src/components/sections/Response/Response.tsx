@@ -124,7 +124,7 @@ export const Response = forwardRef<HTMLElement>(
 
           {/* CTA */}
           <div className={styles.ctaBlock}>
-            <p className={styles.ctaText}>The journey is complete. The response is yours.</p>
+            <p className={styles.ctaText}>Request fulfilled. Now let's build something.</p>
             <a href={contact.resumeUrl} className={styles.ctaButton} download>
               ↓ Download Resume
             </a>

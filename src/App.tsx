@@ -16,7 +16,6 @@ import { ParticleCanvas } from './components/effects/ParticleCanvas/ParticleCanv
 import { RateLimitOverlay } from './components/effects/RateLimitOverlay/RateLimitOverlay';
 import { KonamiOverlay } from './components/effects/KonamiOverlay/KonamiOverlay';
 import { LandingPage } from './components/sections/LandingPage/LandingPage';
-import { EntryPoint } from './components/sections/EntryPoint/EntryPoint';
 import { ApiGateway } from './components/sections/ApiGateway/ApiGateway';
 import { Microservices } from './components/sections/Microservices/Microservices';
 import { AutoScaler } from './components/sections/AutoScaler/AutoScaler';
@@ -103,12 +102,11 @@ export default function App() {
 
       {/* Sections */}
       <LandingPage ref={setSectionRef(0)} />
-      <EntryPoint ref={setSectionRef(1)} />
-      <ApiGateway ref={setSectionRef(2)} />
-      <Microservices ref={setSectionRef(3)} />
-      <AutoScaler ref={setSectionRef(4)} />
-      <CacheHit ref={setSectionRef(5)} />
-      <Response ref={setSectionRef(6)} />
+      <ApiGateway ref={setSectionRef(1)} />
+      <Microservices ref={setSectionRef(2)} />
+      <AutoScaler ref={setSectionRef(3)} />
+      <CacheHit ref={setSectionRef(4)} />
+      <Response ref={setSectionRef(5)} />
 
       {/* HTML comment easter egg */}
       {/* If you're reading this source, you're my kind of person. Let's talk. */}
