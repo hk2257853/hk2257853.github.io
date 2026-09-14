@@ -163,7 +163,8 @@
   color: var(--color-text);
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  white-space: nowrap;
+  text-align: center;
+  line-height: 1.2;
 }
 
 .nodeStatus {

@@ -7,10 +7,11 @@
  * Clicking the CTA smooth-scrolls to the EntryPoint (terminal boot).
  */
 
-import { forwardRef, useRef, useEffect, useCallback } from 'react';
+import { forwardRef, useRef, useEffect, useCallback, type ReactNode } from 'react';
 import { gsap } from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { useViewport } from '../../../hooks/useViewport';
+import { SECTIONS } from '../../../data/sections';
 import styles from './LandingPage.module.css';
 
 gsap.registerPlugin(ScrollToPlugin);
@@ -18,18 +19,18 @@ gsap.registerPlugin(ScrollToPlugin);
 /* ── Node definitions ── */
 interface ArchNode {
   id: string;
-  label: string;
+  label: ReactNode;
   icon: string;
   status: string;
 }
 
 const ARCH_NODES: ArchNode[] = [
-  { id: 'gateway',  label: 'Gateway',       icon: '🚪', status: 'Listening' },
-  { id: 'lb',       label: 'Load Balancer', icon: '⚖️',  status: 'Routing' },
-  { id: 'services', label: 'Services',      icon: '⚙️',  status: '4 pods' },
-  { id: 'database', label: 'Database',      icon: '💾', status: 'Connected' },
-  { id: 'cache',    label: 'Cache',         icon: '⚡', status: 'Hot' },
-  { id: 'events',   label: 'Events',        icon: '📡', status: 'Streaming' },
+  { id: 'gateway',  label: 'Gateway',               icon: '🚪', status: 'Listening' },
+  { id: 'lb',       label: <>Load<br />Balancer</>, icon: '⚖️',  status: 'Routing' },
+  { id: 'services', label: 'Services',              icon: '⚙️',  status: '4 pods' },
+  { id: 'database', label: 'Database',              icon: '💾', status: 'Connected' },
+  { id: 'cache',    label: 'Cache',                 icon: '⚡', status: 'Hot' },
+  { id: 'events',   label: 'Events',                icon: '📡', status: 'Streaming' },
 ];
 
 /**
@@ -83,11 +84,19 @@ export const LandingPage = forwardRef<HTMLElement>(
 
     /* ── CTA click handler ── */
     const handleInitiate = useCallback(() => {
-      const entryPoint = document.getElementById('entry-point');
-      if (entryPoint) {
+      const nextSectionId = SECTIONS[1]?.id ?? 'api-gateway';
+      const target = document.getElementById(nextSectionId);
+      if (target) {
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        let offsetY = 0;
+        if (isMobile) {
+          const nav = document.querySelector('[aria-label="Section navigation"]');
+          offsetY = nav ? nav.getBoundingClientRect().height : 0;
+        }
+
         gsap.to(window, {
           duration: 1.2,
-          scrollTo: { y: entryPoint, offsetY: 0 },
+          scrollTo: { y: target, offsetY },
           ease: 'power3.inOut',
         });
       }

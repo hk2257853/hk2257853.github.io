@@ -26,7 +26,6 @@ export function TeachingMoment({ activeIndex }: TeachingMomentProps) {
     if (activeIndex === dismissedIndex) return;
     // Small delay so it doesn't appear instantly
     const timeout = setTimeout(() => {
-      setIsCollapsed(false);
       setVisible(true);
     }, 800);
     return () => clearTimeout(timeout);
@@ -50,11 +49,15 @@ export function TeachingMoment({ activeIndex }: TeachingMomentProps) {
 
   if (!section) return null;
 
-  if (isCollapsed && visible) {
+  if (isCollapsed) {
+    if (!visible) return null;
     return (
       <button
         className={`${styles.collapsedPill} ${styles.visible}`}
-        onClick={() => setIsCollapsed(false)}
+        onClick={() => {
+          setIsCollapsed(false);
+          setVisible(true);
+        }}
         aria-label={`Expand explanation for ${section.component}`}
       >
         <span className={styles.pillIcon}>{section.icon}</span>
