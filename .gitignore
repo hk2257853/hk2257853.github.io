@@ -7,10 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Environment
+.env
+.env.*
+!.env.example
+
 node_modules
 dist
 dist-ssr
 *.local
+Thumbs.db
 
 # Editor directories and files
 .vscode/*
