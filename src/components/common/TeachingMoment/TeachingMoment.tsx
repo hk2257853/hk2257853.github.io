@@ -79,7 +79,7 @@ export function TeachingMoment({ activeIndex }: TeachingMomentProps) {
             aria-label="Minimize explanation"
             title="Minimize"
           >
-            —
+            -
           </button>
           <button
             className={styles.actionBtn}

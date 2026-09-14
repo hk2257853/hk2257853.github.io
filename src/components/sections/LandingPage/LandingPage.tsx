@@ -189,7 +189,7 @@ export const LandingPage = forwardRef<HTMLElement>(
           {/* Title */}
           <div className={styles.titleBlock}>
             <h1 className={styles.name}>Harsh Kumar</h1>
-            <p className={styles.subtitle}>Backend & Distributed Systems • AI</p>
+            <p className={styles.subtitle}>Backend Engineer: Distributed Systems + AI</p>
           </div>
 
           {/* Orbital diagram */}

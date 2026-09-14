@@ -22,7 +22,7 @@ export const projects: Project[] = [
     serviceName: 'onboarding-conversion-service',
     status: 'DEPLOYED',
     description: 'Architected a generic two-phase API-driven onboarding utility replacing legacy engineer-dependent PL/SQL processes with a BA-operable system.',
-    responsibility: 'Two-Phase API Onboarding Framework',
+    responsibility: 'Replaced engineer-dependent PL/SQL flows with a BA-operable onboarding system',
     stack: ['Java', 'Spring Boot', 'REST APIs', 'Oracle DB', 'PL/SQL', 'JUnit'],
     impact: [
       'Reduced per-client onboarding time from weeks to days, delivered 30% ahead of estimate',
@@ -38,7 +38,7 @@ export const projects: Project[] = [
     serviceName: 'ai-developer-tooling-mesh',
     status: 'RUNNING',
     description: 'Custom Windsurf MCP extensions, autonomous AI agents, and browser automation tooling engineered to eliminate repetitive engineering toil.',
-    responsibility: 'IDE Agentic Workflows & Automated Code Gen',
+    responsibility: 'Custom IDE + browser tooling that cut repetitive engineering toil across the team',
     stack: ['Windsurf', 'Model Context Protocol (MCP)', 'Python', 'Chrome Extension (JS)', 'Cucumber', 'AI Hub'],
     impact: [
       'Custom Windsurf MCP server: direct, controlled IDE access to Oracle DB & PL/SQL (+20-30% task acceleration)',
@@ -54,7 +54,7 @@ export const projects: Project[] = [
     serviceName: 'api-platform-modernization',
     status: 'DEPLOYED',
     description: 'Modernized decade-old Java-based enterprise API platform with a new wrapper layer, early microservice POC, and automated metadata documentation generator.',
-    responsibility: 'API Framework Modernization & Doc Gen',
+    responsibility: 'Modernized a decade-old API platform and automated documentation generation',
     stack: ['Java', 'Spring Boot', 'Microservices', 'Python', 'OpenAPI / Swagger', 'Okta SSO', 'Postman'],
     impact: [
       'Modernized legacy API wrapper layer and developed microservice POC, reducing onboarding friction for enterprise clients',
@@ -70,7 +70,7 @@ export const projects: Project[] = [
     serviceName: 'genai-service-platform',
     status: 'RUNNING',
     description: 'Production-grade GenAI backend featuring hybrid RAG, reranking, LangGraph multi-agent workflows, and MCP tool integrations.',
-    responsibility: 'Hybrid RAG & Multi-Agent Platform',
+    responsibility: 'Production GenAI backend: hybrid RAG, multi-agent orchestration, streaming endpoints',
     stack: ['FastAPI', 'Python', 'LangGraph', 'LangChain', 'RAG / Vector DB', 'MCP', 'PostgreSQL'],
     impact: [
       'Hybrid RAG pipeline combining semantic vector search with cross-encoder reranking',
@@ -85,7 +85,7 @@ export const projects: Project[] = [
     serviceName: 'ecommerce-microservices',
     status: 'HEALTHY',
     description: 'Scalable Java backend built with Spring Boot, Kafka event streaming, Redis caching, PostgreSQL, Docker, and distributed transaction patterns.',
-    responsibility: 'Distributed Systems & Async Workflows',
+    responsibility: 'Scalable e-commerce backend with distributed locking, Kafka workflows, and rate limiting from scratch',
     stack: ['Java', 'Spring Boot', 'Kafka (KRaft)', 'Redis', 'PostgreSQL', 'Docker'],
     impact: [
       'Idempotent payment & order workflows with Redis SETNX distributed locking',

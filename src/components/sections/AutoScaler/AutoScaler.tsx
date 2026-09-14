@@ -26,18 +26,18 @@ const AI_LEVERAGE = [
 const PROOF_POINTS = [
   {
     icon: '🧠',
-    text: 'Fundamentals Judge Correctness: ',
-    highlight: 'Anyone can prompt an LLM. Knowing how distributed systems break prevents shipping fragile architecture.',
+    text: 'Fundamentals catch what AI misses: ',
+    highlight: 'Race conditions, consistency boundaries, failure modes that only appear at scale - these require real systems knowledge, not better prompts.',
   },
   {
     icon: '🔧',
-    text: 'Custom Tooling Over Generic Prompts: ',
-    highlight: 'Engineered custom MCP servers and Chrome extensions from scratch to eliminate engineering toil across team workflows.',
+    text: 'Custom tooling, not generic prompts: ',
+    highlight: 'Built MCP servers and Chrome extensions from scratch - purpose-built to eliminate toil in real workflows, adopted by 50+ engineers.',
   },
   {
     icon: '🚀',
-    text: 'Force Multiplier in Production: ',
-    highlight: '1 engineer with deep fundamentals + AI tooling operates with the velocity and output of a full squad.',
+    text: 'Measured in production: ',
+    highlight: '60+ API adoptions in 2 weeks (4-week estimate), 100+ test scenarios automated, onboarding cut from weeks to days. The 4x is the output, not the claim.',
   },
 ];
 
@@ -114,8 +114,8 @@ export const AutoScaler = forwardRef<HTMLElement>(
           <div className={styles.componentLabel}>📈 Horizontal Scaling</div>
           <h2 className={styles.sectionTitle}>Scaling Up...</h2>
           <p className={styles.subtitle}>
-            When the load spikes, you don't break — you scale.
             Deep fundamentals in system design and debugging, multiplied by custom AI tooling.
+            Not just faster - structurally more capable.
           </p>
 
           {/* Scaling visualization: 1 pod → 4 pods */}
