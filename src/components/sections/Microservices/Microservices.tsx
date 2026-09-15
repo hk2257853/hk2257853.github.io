@@ -63,6 +63,8 @@ export const Microservices = forwardRef<HTMLElement>(
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.repoLink}
+                        data-umami-event="Project Repo Click"
+                        data-umami-event-project={project.serviceName}
                       >
                         GitHub ↗
                       </a>

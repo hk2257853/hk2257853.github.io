@@ -95,7 +95,11 @@ export const Response = forwardRef<HTMLElement>(
                 <div>
                   <span className={styles.jsonKey}>"email"</span>
                   <span className={styles.jsonBrace}>: </span>
-                  <a href={`mailto:${contact.email}`} className={styles.jsonValueLink}>
+                  <a
+                    href={`mailto:${contact.email}`}
+                    className={styles.jsonValueLink}
+                    data-umami-event="Email Click"
+                  >
                     "{contact.email}"
                   </a>
                 </div>
@@ -104,7 +108,13 @@ export const Response = forwardRef<HTMLElement>(
                 <div>
                   <span className={styles.jsonKey}>"linkedin"</span>
                   <span className={styles.jsonBrace}>: </span>
-                  <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className={styles.jsonValueLink}>
+                  <a
+                    href={contact.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.jsonValueLink}
+                    data-umami-event="LinkedIn Click"
+                  >
                     "{contact.linkedin}"
                   </a>
                 </div>
@@ -113,7 +123,13 @@ export const Response = forwardRef<HTMLElement>(
                 <div>
                   <span className={styles.jsonKey}>"github"</span>
                   <span className={styles.jsonBrace}>: </span>
-                  <a href={contact.github} target="_blank" rel="noopener noreferrer" className={styles.jsonValueLink}>
+                  <a
+                    href={contact.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.jsonValueLink}
+                    data-umami-event="GitHub Profile Click"
+                  >
                     "{contact.github}"
                   </a>
                 </div>
@@ -125,7 +141,12 @@ export const Response = forwardRef<HTMLElement>(
           {/* CTA */}
           <div className={styles.ctaBlock}>
             <p className={styles.ctaText}>Request fulfilled. Now let's build something.</p>
-            <a href={contact.resumeUrl} className={styles.ctaButton} download>
+            <a
+              href={contact.resumeUrl}
+              className={styles.ctaButton}
+              download
+              data-umami-event="Resume Download"
+            >
               ↓ Download Resume
             </a>
           </div>

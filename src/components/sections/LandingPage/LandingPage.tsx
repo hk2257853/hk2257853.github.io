@@ -271,6 +271,7 @@ export const LandingPage = forwardRef<HTMLElement>(
                 className={styles.ctaButton}
                 onClick={handleInitiate}
                 id="initiate-request-btn"
+                data-umami-event="Initiate Request CTA"
               >
                 Initiate <br /> Request
                 <span className={styles.ctaArrow}>→</span>
