@@ -124,8 +124,8 @@ export const AutoScaler = forwardRef<HTMLElement>(
               <div className={`${styles.pod} ${styles.origin}`}>1×</div>
             </div>
             <div className={styles.scalingArrow}>→</div>
-            <div className={styles.podGroup}>
-              <div className={`${styles.pod} ${styles.origin}`}>1×</div>
+            <div className={`${styles.podGroup} ${styles.scaledGroup}`}>
+              <div className={styles.pod}>1×</div>
               <div className={`${styles.pod} ${styles.scaled}`}>2×</div>
               <div className={`${styles.pod} ${styles.scaled}`}>3×</div>
               <div className={`${styles.pod} ${styles.scaled}`}>4×</div>

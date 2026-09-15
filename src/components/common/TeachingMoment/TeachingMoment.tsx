@@ -17,24 +17,24 @@ interface TeachingMomentProps {
 export function TeachingMoment({ activeIndex }: TeachingMomentProps) {
   const [visible, setVisible] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [dismissedIndex, setDismissedIndex] = useState(-1);
+  const [isDismissed, setIsDismissed] = useState(false);
 
   const section = SECTIONS[activeIndex];
 
-  // Show tooltip when section changes (unless user dismissed this one)
+  // Show tooltip when section changes (unless dismissed)
   useEffect(() => {
-    if (activeIndex === dismissedIndex) return;
+    if (isDismissed) return;
     // Small delay so it doesn't appear instantly
     const timeout = setTimeout(() => {
       setVisible(true);
     }, 800);
     return () => clearTimeout(timeout);
-  }, [activeIndex, dismissedIndex]);
+  }, [activeIndex, isDismissed]);
 
   const handleDismiss = useCallback(() => {
     setVisible(false);
-    setDismissedIndex(activeIndex);
-  }, [activeIndex]);
+    setIsDismissed(true);
+  }, []);
 
   const handleToggleCollapse = useCallback(() => {
     setIsCollapsed((prev) => !prev);
@@ -47,7 +47,7 @@ export function TeachingMoment({ activeIndex }: TeachingMomentProps) {
     return () => clearTimeout(timeout);
   }, [visible, isCollapsed, activeIndex]);
 
-  if (!section) return null;
+  if (isDismissed || !section) return null;
 
   if (isCollapsed) {
     if (!visible) return null;

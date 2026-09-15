@@ -72,10 +72,13 @@
   flex-shrink: 0;
 }
 
-.pod.origin {
-  border-color: var(--color-accent);
+/* Baseline: 1× on left and 1× on right share the exact same level */
+.pod.origin,
+.scaledGroup .pod:nth-child(1) {
+  border-color: hsla(175, 75%, 50%, 0.5);
   color: var(--color-accent);
-  box-shadow: var(--glow-sm);
+  background: var(--color-surface);
+  box-shadow: 0 0 0.35rem hsla(175, 80%, 55%, 0.16);
 }
 
 .pod.scaled {
@@ -83,11 +86,37 @@
   transform: scale(0.8);
 }
 
-.pod.scaled.visible {
+/* Progressive Scaling Ramp on right pod group: 1× -> 2× -> 3× -> 4× */
+.scaledGroup .pod:nth-child(2).visible {
   opacity: 1;
   transform: scale(1);
-  border-color: var(--color-accent-dim);
+  border-color: hsla(175, 75%, 52%, 0.65);
   color: var(--color-accent);
+  background: hsla(175, 80%, 55%, 0.03);
+  box-shadow: 0 0 0.5rem hsla(175, 80%, 55%, 0.22);
+}
+
+.scaledGroup .pod:nth-child(3).visible {
+  opacity: 1;
+  transform: scale(1);
+  border-color: hsla(175, 80%, 55%, 0.8);
+  color: hsl(175, 90%, 85%);
+  background: hsla(175, 80%, 55%, 0.05);
+  box-shadow: 0 0 0.75rem hsla(175, 85%, 60%, 0.28);
+}
+
+.scaledGroup .pod:nth-child(4).visible {
+  opacity: 1;
+  transform: scale(1);
+  border-color: var(--color-accent);
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    hsla(175, 85%, 55%, 0.12),
+    hsla(175, 80%, 55%, 0.04)
+  );
+  box-shadow: 0 0 1.05rem hsla(175, 90%, 65%, 0.38);
+  font-weight: var(--weight-bold);
 }
 
 .scalingArrow {

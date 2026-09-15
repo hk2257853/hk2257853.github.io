@@ -183,7 +183,7 @@ export const LandingPage = forwardRef<HTMLElement>(
 
       // 8. Tagline
       tl.to(tagline, {
-        opacity: 0.5,
+        opacity: 1,
         duration: 0.5,
       }, '-=0.1');
 

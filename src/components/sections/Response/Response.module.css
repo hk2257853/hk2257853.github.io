@@ -135,7 +135,7 @@
 
 .ctaText {
   font-size: var(--text-sm);
-  color: var(--color-text-dim);
+  color: var(--color-text-muted);
   margin-bottom: var(--space-md);
 }
 
@@ -164,7 +164,7 @@
 .responseTime {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--color-text-dim);
+  color: var(--color-text-muted);
   text-align: center;
   margin-top: var(--space-xl);
   opacity: 0;

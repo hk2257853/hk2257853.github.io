@@ -290,7 +290,7 @@
 .tagline {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--color-text-dim);
+  color: var(--color-text-muted);
   letter-spacing: 0.12em;
   opacity: 0;
   text-align: center;

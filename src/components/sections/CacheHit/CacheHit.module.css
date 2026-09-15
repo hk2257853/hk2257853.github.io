@@ -113,9 +113,10 @@
 .ttlFooter {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--color-text-dim);
+  color: var(--color-text-muted);
   text-align: center;
   opacity: 0;
+  letter-spacing: 0.04em;
 }
 
 .ttlValue {
