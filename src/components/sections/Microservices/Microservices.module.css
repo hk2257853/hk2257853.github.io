@@ -139,7 +139,7 @@
   background: hsla(175, 80%, 55%, 0.18);
   border-color: var(--color-accent);
   box-shadow: var(--glow-sm);
-  transform: translateY(-1px);
+  transform: translateY(-0.0625rem);
 }
 
 .enterpriseTag {

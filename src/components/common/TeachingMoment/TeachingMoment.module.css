@@ -6,8 +6,8 @@
   max-width: 20rem;
   padding: var(--space-md) var(--space-lg);
   background: hsla(225, 20%, 10%, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
   border: 0.0625rem solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
@@ -88,8 +88,8 @@
   border: 0.0625rem solid var(--color-accent-dim);
   border-radius: var(--radius-full);
   box-shadow: var(--shadow-md);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(0.5rem);
+  -webkit-backdrop-filter: blur(0.5rem);
   cursor: pointer;
   color: var(--color-accent);
   font-family: var(--font-mono);
@@ -109,7 +109,7 @@
   background: hsla(225, 20%, 14%, 0.95);
   border-color: var(--color-accent);
   box-shadow: var(--glow-sm);
-  transform: translateY(-1px);
+  transform: translateY(-0.0625rem);
 }
 
 .pillIcon {

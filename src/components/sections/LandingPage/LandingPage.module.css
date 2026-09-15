@@ -363,20 +363,37 @@
 
 @media (max-width: 768px) {
   .landing {
-    padding-top: var(--space-md);
-    padding-bottom: var(--space-md);
+    height: calc(100vh - var(--mobile-header-height) - var(--safe-area-top));
+    height: calc(100dvh - var(--mobile-header-height) - var(--safe-area-top));
+    min-height: calc(100vh - var(--mobile-header-height) - var(--safe-area-top));
+    min-height: calc(100dvh - var(--mobile-header-height) - var(--safe-area-top));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: clamp(0.75rem, 2vh, 1.5rem);
+    padding-bottom: calc(clamp(1rem, 3vh, 2rem) + var(--safe-area-bottom));
+    box-sizing: border-box;
   }
 
   .landingInner {
-    gap: clamp(1.25rem, 3vh, 2rem);
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 var(--space-xs);
+    gap: 0;
+    box-sizing: border-box;
   }
 
   .titleBlock {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .tagline {
-    margin-top: 0.75rem;
+    margin-top: 0;
   }
 }
 
