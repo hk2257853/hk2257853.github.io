@@ -7,6 +7,7 @@
 
 import { forwardRef, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
+import { CompoundGrowth } from './CompoundGrowth';
 import styles from './AutoScaler.module.css';
 
 const CORE_FUNDAMENTALS = [
@@ -51,9 +52,7 @@ export const AutoScaler = forwardRef<HTMLElement>(
       const label = containerRef.current.querySelector(`.${styles.componentLabel}`);
       const title = containerRef.current.querySelector(`.${styles.sectionTitle}`);
       const subtitle = containerRef.current.querySelector(`.${styles.subtitle}`);
-      const viz = containerRef.current.querySelector(`.${styles.scalingViz}`);
-      const scaledPods = containerRef.current.querySelectorAll(`.${styles.pod}.${styles.scaled}`);
-      const multiplier = containerRef.current.querySelector(`.${styles.multiplierLabel}`);
+      const stageWrapper = containerRef.current.querySelector(`.${styles.stageWrapper}`);
       const columns = containerRef.current.querySelectorAll(`.${styles.comparisonColumn}`);
       const divider = containerRef.current.querySelector(`.${styles.comparisonDivider}`);
       const proofs = containerRef.current.querySelectorAll(`.${styles.proofPoint}`);
@@ -70,26 +69,10 @@ export const AutoScaler = forwardRef<HTMLElement>(
       tl.to(title, { opacity: 1, duration: 0.4 }, '-=0.1');
       tl.to(subtitle, { opacity: 1, duration: 0.4 }, '-=0.2');
 
-      // Show scaling viz
-      tl.to(viz, { opacity: 1, duration: 0.3 });
-
-      // Scale up pods one by one
-      scaledPods.forEach((pod) => {
-        tl.to(pod, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.3,
-          ease: 'back.out(1.4)',
-          onComplete: () => pod.classList.add(styles.visible),
-        }, '-=0.1');
-      });
-
-      // Multiplier number
-      tl.to(multiplier, {
-        opacity: 1,
-        duration: 0.5,
-        ease: 'power2.out',
-      }, '-=0.1');
+      // Stage wrapper fade-in
+      if (stageWrapper) {
+        tl.to(stageWrapper, { opacity: 1, y: 0, duration: 0.4 }, '-=0.1');
+      }
 
       // Comparison columns
       tl.to(columns[0], { opacity: 1, duration: 0.4 }, '-=0.2');
@@ -118,24 +101,9 @@ export const AutoScaler = forwardRef<HTMLElement>(
             Not just faster - structurally more capable.
           </p>
 
-          {/* Scaling visualization: 1 pod → 4 pods */}
-          <div className={styles.scalingViz}>
-            <div className={styles.podGroup}>
-              <div className={`${styles.pod} ${styles.origin}`}>1×</div>
-            </div>
-            <div className={styles.scalingArrow}>→</div>
-            <div className={`${styles.podGroup} ${styles.scaledGroup}`}>
-              <div className={styles.pod}>1×</div>
-              <div className={`${styles.pod} ${styles.scaled}`}>2×</div>
-              <div className={`${styles.pod} ${styles.scaled}`}>3×</div>
-              <div className={`${styles.pod} ${styles.scaled}`}>4×</div>
-            </div>
-          </div>
-
-          {/* 4x multiplier */}
-          <div className={styles.multiplierLabel}>
-            4×
-            <span>output multiplier</span>
+          {/* 1x to 4x Compounding Growth Stage */}
+          <div className={styles.stageWrapper}>
+            <CompoundGrowth />
           </div>
 
           {/* Before / After */}

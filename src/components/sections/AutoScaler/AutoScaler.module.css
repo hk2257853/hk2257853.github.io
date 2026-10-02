@@ -39,110 +39,14 @@
   opacity: 0;
 }
 
-/* Scaling visualization */
-.scalingViz {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-xl);
+/* Scaling visualization: 1x -> 4x Stage */
+.stageWrapper {
+  opacity: 0;
+  transform: translateY(1rem);
   margin-bottom: var(--space-2xl);
-  opacity: 0;
+  width: 100%;
 }
 
-.podGroup {
-  display: flex;
-  gap: var(--space-sm);
-  align-items: center;
-}
-
-.pod {
-  width: clamp(2.35rem, 6.5vw, 3.5rem);
-  height: clamp(2.35rem, 6.5vw, 3.5rem);
-  border-radius: var(--radius-md);
-  border: 0.0625rem solid var(--color-border);
-  background: var(--color-surface);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  transition: all var(--duration-normal) var(--ease-out);
-  position: relative;
-  flex-shrink: 0;
-}
-
-/* Baseline: 1× on left and 1× on right share the exact same level */
-.pod.origin,
-.scaledGroup .pod:nth-child(1) {
-  border-color: hsla(175, 75%, 50%, 0.5);
-  color: var(--color-accent);
-  background: var(--color-surface);
-  box-shadow: 0 0 0.35rem hsla(175, 80%, 55%, 0.16);
-}
-
-.pod.scaled {
-  opacity: 0;
-  transform: scale(0.8);
-}
-
-/* Progressive Scaling Ramp on right pod group: 1× -> 2× -> 3× -> 4× */
-.scaledGroup .pod:nth-child(2).visible {
-  opacity: 1;
-  transform: scale(1);
-  border-color: hsla(175, 75%, 52%, 0.65);
-  color: var(--color-accent);
-  background: hsla(175, 80%, 55%, 0.03);
-  box-shadow: 0 0 0.5rem hsla(175, 80%, 55%, 0.22);
-}
-
-.scaledGroup .pod:nth-child(3).visible {
-  opacity: 1;
-  transform: scale(1);
-  border-color: hsla(175, 80%, 55%, 0.8);
-  color: hsl(175, 90%, 85%);
-  background: hsla(175, 80%, 55%, 0.05);
-  box-shadow: 0 0 0.75rem hsla(175, 85%, 60%, 0.28);
-}
-
-.scaledGroup .pod:nth-child(4).visible {
-  opacity: 1;
-  transform: scale(1);
-  border-color: var(--color-accent);
-  color: #fff;
-  background: linear-gradient(
-    135deg,
-    hsla(175, 85%, 55%, 0.12),
-    hsla(175, 80%, 55%, 0.04)
-  );
-  box-shadow: 0 0 1.05rem hsla(175, 90%, 65%, 0.38);
-  font-weight: var(--weight-bold);
-}
-
-.scalingArrow {
-  font-family: var(--font-mono);
-  font-size: var(--text-lg);
-  color: var(--color-accent-dim);
-  flex-shrink: 0;
-}
-
-.multiplierLabel {
-  font-family: var(--font-mono);
-  font-size: var(--text-3xl);
-  font-weight: var(--weight-bold);
-  color: var(--color-accent);
-  text-align: center;
-  margin-bottom: var(--space-xl);
-  opacity: 0;
-}
-
-.multiplierLabel span {
-  font-size: var(--text-sm);
-  color: var(--color-text-dim);
-  display: block;
-  font-weight: var(--weight-normal);
-  margin-top: var(--space-xs);
-}
 
 /* Before/After comparison */
 .comparisonGrid {
@@ -277,15 +181,6 @@
     background: var(--color-border);
     margin: 0 var(--space-md);
   }
-
-  .scalingViz {
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  .scalingArrow {
-    transform: rotate(90deg);
-  }
 }
 
 @media (max-width: 480px) {
@@ -296,9 +191,5 @@
   .proofPoint {
     padding: var(--space-md);
     gap: var(--space-sm);
-  }
-
-  .podGroup {
-    gap: var(--space-xs);
   }
 }
