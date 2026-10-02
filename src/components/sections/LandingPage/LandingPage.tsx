@@ -40,11 +40,11 @@ export const LandingPage = forwardRef<HTMLElement>(function LandingPage(_props, 
     [...POINTS, POINTS[0]].forEach((point, i) => {
       timeline.to(packetRef.current, {
         // Every hop covers the same distance, so keep the speed uniform.
-        attr: { cx: point.x, cy: point.y }, duration: 1,
+        attr: { cx: point.x, cy: point.y }, duration: 0.85,
         ease: 'power1.inOut', onStart: () => setActiveNode(i % NODES.length),
       });
     });
-    timeline.to(packetRef.current, { opacity: 0, duration: 0.45 });
+    timeline.to(packetRef.current, { opacity: 0, duration: 0.35 });
   };
 
   return (
@@ -58,7 +58,7 @@ export const LandingPage = forwardRef<HTMLElement>(function LandingPage(_props, 
             <path id="landing-orbit" d={ORBIT} className={styles.connection} />
             <path d="M260 260 L260 76" className={styles.spoke} />
             {!reduced && !launching && <circle r="3" className={styles.idlePacket}>
-              <animateMotion dur="18s" repeatCount="indefinite"><mpath href="#landing-orbit" /></animateMotion>
+              <animateMotion dur="15s" repeatCount="indefinite"><mpath href="#landing-orbit" /></animateMotion>
             </circle>}
             <circle ref={packetRef} r="6" cx="260" cy="260" className={styles.requestPacket} />
           </svg>

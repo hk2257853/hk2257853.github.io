@@ -12,7 +12,8 @@
 
   --color-text:         hsl(220, 20%, 88%);
   --color-text-muted:   hsl(220, 15%, 62%);
-  --color-text-dim:     hsl(220, 12%, 46%);
+  /* Still secondary, but readable against the dark surfaces at small sizes. */
+  --color-text-dim:     hsl(220, 12%, 58%);
 
   --color-accent:       hsl(175, 80%, 55%);
   --color-accent-glow:  hsl(175, 90%, 65%);

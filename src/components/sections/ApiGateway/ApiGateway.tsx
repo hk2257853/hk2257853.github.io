@@ -36,18 +36,6 @@ export const ApiGateway = forwardRef<HTMLElement>(function ApiGateway(_props, re
         <h2 id="gateway-title" className={styles.title}>Meet the engineer.</h2>
         <p className={styles.intro}>I build backend systems at OneShield, and tools that make engineering teams faster.</p>
         <div className={styles.layout}>
-          <div className={styles.profile}>
-            <div className={styles.bar}><span className={styles.dot} /> Request headers <span className={styles.method}>GET /about</span></div>
-            <dl className={styles.headers}>
-              {Object.entries(profile.headers).filter(([key]) => key !== 'Method').map(([key, value]) => (
-                <div key={key} className={styles.row}>
-                  <dt>{key}</dt><dd>{value}</dd>
-                </div>
-              ))}
-            </dl>
-            {phase === 2 && <div className={styles.scan} aria-hidden="true" />}
-            <div className={styles.profileFooter}><span>India · open to relocation</span><span className={styles.available}>Open to opportunities</span></div>
-          </div>
           <div className={styles.playground}>
             <div className={styles.playgroundHeading}><span>Try the gateway</span><span className={styles.miniLabel}>Interactive walkthrough</span></div>
             <div className={styles.flow} data-phase={phase} aria-hidden="true">
@@ -66,6 +54,18 @@ export const ApiGateway = forwardRef<HTMLElement>(function ApiGateway(_props, re
               {busy ? 'Processing…' : phase === 3 ? 'Send another request ↗' : 'Send request ↗'}
             </button>
             <p className={styles.feedback} role="status">{STATUS[phase]}</p>
+          </div>
+          <div className={styles.profile}>
+            <div className={styles.bar}><span className={styles.dot} /> Request headers <span className={styles.method}>GET /about</span></div>
+            <dl className={styles.headers}>
+              {Object.entries(profile.headers).filter(([key]) => key !== 'Method').map(([key, value]) => (
+                <div key={key} className={styles.row}>
+                  <dt>{key}</dt><dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+            {phase === 2 && <div className={styles.scan} aria-hidden="true" />}
+            <div className={styles.profileFooter}><span>India · open to relocation</span><span className={styles.available}>Open to opportunities</span></div>
           </div>
         </div>
         <div className={styles.routeHeading}><span>Choose your next endpoint</span><span>{phase === 3 ? '4 routes resolved' : 'Always open to explore'}</span></div>
