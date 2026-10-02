@@ -34,7 +34,7 @@ export const CacheHit = forwardRef<HTMLElement>(function CacheHit(_props, ref) {
           <div key={filter} className={styles.entries + (entered ? ' ' + styles.loaded : '')}>
             {entries.map((entry, i) => <article key={entry.id} className={styles.entry + (entry.category !== 'achievement' ? ' ' + styles.engineering : '')}
               style={{ '--delay': i * 70 + 'ms' } as CSSProperties}>
-              <div className={styles.entryMeta}><span>{entry.category}</span><span aria-hidden="true">↗</span></div>
+              <div className={styles.entryMeta}><span>{entry.category}</span><span aria-hidden="true">HIT</span></div>
               <strong className={styles.value}>{entry.value}</strong>
               <h3>{entry.title}</h3><p>{entry.text}</p>
             </article>)}
