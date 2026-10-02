@@ -39,7 +39,7 @@ export const LandingPage = forwardRef<HTMLElement>(function LandingPage(_props, 
     timeline.set(packetRef.current, { attr: { cx: 260, cy: 260 }, opacity: 1 });
     [...POINTS, POINTS[0]].forEach((point, i) => {
       timeline.to(packetRef.current, {
-        attr: { cx: point.x, cy: point.y }, duration: i === 0 ? 0.55 : 0.48,
+        attr: { cx: point.x, cy: point.y }, duration: i === 0 ? 0.6 : 0.52,
         ease: 'power1.inOut', onStart: () => setActiveNode(i % NODES.length),
       });
     });
