@@ -1,134 +1,83 @@
-/**
- * ApiGateway - Section 2: Who Is This Request?
- *
- * The packet arrives at the gateway → request headers are "read" and displayed
- * line by line → validation checks pass → available routes are revealed.
- */
-
-import { forwardRef, useRef, useEffect } from 'react';
-import { gsap } from 'gsap';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { profile } from '../../../data/profile';
-import { SECTIONS } from '../../../data/sections';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import styles from './ApiGateway.module.css';
 
-const VALIDATIONS = [
-  'Authenticated',
-  'Authorized',
-  'Rate limit OK',
-  'Request validated',
+const ROUTES = [
+  { id: 'microservices', path: '/projects', label: 'Explore the work', icon: '⚙️' },
+  { id: 'auto-scaler', path: '/approach', label: 'How I build', icon: '📈' },
+  { id: 'cache-hit', path: '/highlights', label: 'The quick version', icon: '⚡' },
+  { id: 'response', path: '/contact', label: 'Let’s connect', icon: '↗' },
 ];
+const CHECKS = ['Identity read', 'Headers checked', 'Route resolved'];
+const STATUS = ['Ready when you are.', 'Sending your request…', 'Inspecting the headers…', 'Request accepted. Pick a route.'];
 
-export const ApiGateway = forwardRef<HTMLElement>(
-  function ApiGateway(_props, ref) {
-    const containerRef = useRef<HTMLDivElement>(null);
+export const ApiGateway = forwardRef<HTMLElement>(function ApiGateway(_props, ref) {
+  const reduced = useReducedMotion();
+  const [phase, setPhase] = useState(0);
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
-    useEffect(() => {
-      if (!containerRef.current) return;
+  const send = () => {
+    timers.current.forEach(clearTimeout);
+    if (reduced) { setPhase(3); return; }
+    setPhase(1);
+    timers.current = [
+      setTimeout(() => setPhase(2), 500),
+      setTimeout(() => setPhase(3), 1650),
+    ];
+  };
+  const busy = phase === 1 || phase === 2;
 
-      const label = containerRef.current.querySelector(`.${styles.componentLabel}`);
-      const rows = containerRef.current.querySelectorAll(`.${styles.headerRow}`);
-      const checks = containerRef.current.querySelectorAll(`.${styles.validationCheck}`);
-      const routeBlock = containerRef.current.querySelector(`.${styles.routeBlock}`);
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top 60%',
-          toggleActions: 'play none none none',
-        },
-      });
-
-      // Label fades in
-      tl.to(label, { opacity: 0.7, duration: 0.3 });
-
-      // Headers appear one by one
-      rows.forEach((row, i) => {
-        tl.to(row, {
-          opacity: 1,
-          x: 0,
-          duration: 0.25,
-          ease: 'power2.out',
-        }, i === 0 ? '+=0.1' : '-=0.1');
-      });
-
-      // Validation checks
-      checks.forEach((check) => {
-        tl.to(check, {
-          opacity: 1,
-          x: 0,
-          duration: 0.2,
-          ease: 'power2.out',
-        }, '-=0.05');
-      });
-
-      // Routes reveal
-      tl.to(routeBlock, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        ease: 'power2.out',
-      }, '+=0.1');
-
-      return () => {
-        tl.kill();
-      };
-    }, []);
-
-    // Build header entries from profile data
-    const headers = Object.entries(profile.headers);
-
-    // Route entries from sections (skip landing + entry-point)
-    const routes = SECTIONS.slice(2);
-
-    return (
-      <section ref={ref} id="api-gateway" className={styles.gateway} data-section="api-gateway">
-        <div ref={containerRef} className={styles.gatewayInner}>
-          <div className={styles.componentLabel}>🚪 API Gateway</div>
-
-          {/* Request headers */}
-          <div className={styles.headerBlock}>
-            <div className={styles.headerBlockTitle}>
-              <span className={styles.statusDot} />
-              <span>Request Headers</span>
-            </div>
-            <div className={styles.headerRows}>
-              {headers.map(([key, value]) => (
-                <div key={key} className={styles.headerRow}>
-                  <span className={styles.headerKey}>{key}:</span>
-                  <span className={`${styles.headerValue} ${
-                    key.startsWith('X-') ? styles.highlight : ''
-                  }`}>
-                    {value}
-                  </span>
+  return (
+    <section ref={ref} id="api-gateway" data-section="api-gateway" className={styles.gateway} aria-labelledby="gateway-title">
+      <div className={styles.inner}>
+        <p className={styles.eyebrow}>02 / API Gateway</p>
+        <h2 id="gateway-title" className={styles.title}>Meet the engineer.</h2>
+        <p className={styles.intro}>I build backend systems at OneShield, and tools that make engineering teams faster.</p>
+        <div className={styles.layout}>
+          <div className={styles.profile}>
+            <div className={styles.bar}><span className={styles.dot} /> Request headers <span className={styles.method}>GET /about</span></div>
+            <dl className={styles.headers}>
+              {Object.entries(profile.headers).filter(([key]) => key !== 'Method').map(([key, value]) => (
+                <div key={key} className={styles.row}>
+                  <dt>{key}</dt><dd>{value}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
+            {phase === 2 && <div className={styles.scan} aria-hidden="true" />}
+            <div className={styles.profileFooter}><span>India · open to relocation</span><span className={styles.available}>Open to opportunities</span></div>
           </div>
-
-          {/* Validation */}
-          <div className={styles.validationBlock}>
-            {VALIDATIONS.map((check) => (
-              <div key={check} className={styles.validationCheck}>
-                <span className={styles.checkIcon}>✓</span>
-                <span className={styles.checkText}>{check}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Available routes */}
-          <div className={styles.routeBlock}>
-            <div className={styles.routeTitle}>Available Endpoints</div>
-            <div className={styles.routes}>
-              {routes.map((section) => (
-                <div key={section.id} className={styles.route}>
-                  <span className={styles.routeIcon}>{section.icon}</span>
-                  <span>{section.component}</span>
-                </div>
-              ))}
+          <div className={styles.playground}>
+            <div className={styles.playgroundHeading}><span>Try the gateway</span><span className={styles.miniLabel}>Interactive walkthrough</span></div>
+            <div className={styles.flow} data-phase={phase} aria-hidden="true">
+              <div className={styles.flowNode}>You<span>Request</span></div>
+              <div className={styles.wire}>{phase === 1 && <i className={styles.packet} />}</div>
+              <div className={styles.gate + (phase >= 2 ? ' ' + styles.gateActive : '')}>{phase === 3 ? '✓' : '⌘'}<span>Gateway</span></div>
+              <div className={styles.wire + (phase === 3 ? ' ' + styles.wireReady : '')} />
+              <div className={styles.flowNode}>↗<span>Routes</span></div>
             </div>
+            <ol className={styles.checks}>
+              {CHECKS.map((check, i) => <li key={check} className={phase === 3 ? styles.checked : ''}>
+                <span>{phase === 3 ? '✓' : String(i + 1).padStart(2, '0')}</span>{check}
+              </li>)}
+            </ol>
+            <button type="button" onClick={send} disabled={busy} className={styles.send} data-umami-event="Gateway Send Request">
+              {busy ? 'Processing…' : phase === 3 ? 'Send another request ↗' : 'Send request ↗'}
+            </button>
+            <p className={styles.feedback} role="status">{STATUS[phase]}</p>
           </div>
         </div>
-      </section>
-    );
-  }
-);
+        <div className={styles.routeHeading}><span>Choose your next endpoint</span><span>{phase === 3 ? '4 routes resolved' : 'Always open to explore'}</span></div>
+        <nav className={styles.routes + (phase === 3 ? ' ' + styles.ready : '')} aria-label="Portfolio endpoints">
+          {ROUTES.map(route => <a key={route.id} href={'#' + route.id} className={styles.route}>
+            <span className={styles.routeIcon} aria-hidden="true">{route.icon}</span>
+            <span><code>{route.path}</code><span className={styles.routeLabel}>{route.label}</span></span>
+            <span className={styles.arrow} aria-hidden="true">↗</span>
+          </a>)}
+        </nav>
+      </div>
+    </section>
+  );
+});
+

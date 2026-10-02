@@ -231,3 +231,20 @@
     padding: 0 16px;
   }
 }
+
+/* Keep the original character and material; organize its surrounding story. */
+.stage { height: 480px; border-radius: var(--radius-xl); box-shadow: none; }
+.stageLabel { position: absolute; left: 1.25rem; top: 1.5rem; max-width: 60%; color: var(--color-text-dim); font: .58rem/1.6 var(--font-mono); }
+.coreWrap { top: 46%; }
+.caption { opacity: 1; bottom: 1.7rem; padding: 0 1rem; }
+.caption strong { display: block; color: var(--color-text); font-size: .85rem; font-weight: 500; }
+.caption span { display: block; font-size: .7rem; margin-top: .5rem; color: var(--color-text-muted); line-height: 1.6; }
+.progress { position: absolute; bottom: 6.2rem; left: 50%; transform: translateX(-50%); display: flex; gap: .35rem; }
+.progress > span { width: 1.2rem; height: 3px; border-radius: 3px; background: var(--color-border); }
+.progress .reached { background: var(--color-accent); }
+.inputs { position: absolute; inset: 0; pointer-events: none; }
+.input { position: absolute; top: 46%; left: 50%; display: flex; gap: .4rem; align-items: center; font-size: .66rem; white-space: nowrap; background: var(--color-surface); border: 1px solid var(--color-accent-dim); padding: .4rem .65rem; border-radius: var(--radius-full); animation: feed 1.35s ease-in both; }
+.input i { width: 5px; height: 5px; border-radius: 50%; background: var(--color-accent); }
+@keyframes feed { 0% { opacity: 0; transform: translate(calc(-50% + var(--side) * 160px), -95px); } 25% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(.7); } }
+@media (max-width: 480px) { .stage { height: 420px; } .stageLabel { left: 1rem; top: 1.1rem; max-width: 55%; font-size: .52rem; } .input { font-size: .55rem; } }
+@media (prefers-reduced-motion: reduce) { .core, .coreFace, .coreLabel, .caption { transition: none; } .input { animation: none; } }

@@ -29,7 +29,7 @@ const checkIsMobile = () => typeof window !== 'undefined' && window.innerWidth <
 export function TeachingMoment({ activeIndex }: TeachingMomentProps) {
   const [isMobile, setIsMobile] = useState(checkIsMobile);
   const [visible, setVisible] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(checkIsMobile);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [userMinimized, setUserMinimized] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [pokeQuote, setPokeQuote] = useState<string | null>(null);
@@ -52,9 +52,7 @@ export function TeachingMoment({ activeIndex }: TeachingMomentProps) {
     if (isDismissed) return;
 
     const timeout = setTimeout(() => {
-      if (!userMinimized && !isMobile) {
-        setIsCollapsed(false);
-      }
+      // Open only when invited, so the guide does not cover each new section.
       setVisible(true);
     }, 500);
 
@@ -79,6 +77,14 @@ export function TeachingMoment({ activeIndex }: TeachingMomentProps) {
     setUserMinimized(false);
     setIsCollapsed(false);
     setVisible(true);
+  }, []);
+
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsCollapsed(true);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
   }, []);
 
   const handlePokeMascot = useCallback((e?: React.MouseEvent) => {

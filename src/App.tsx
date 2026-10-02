@@ -58,7 +58,17 @@ export default function App() {
       triggers.push(trigger);
     });
 
+    // Expanded case studies and filtered highlights can change section heights.
+    let refreshFrame = 0;
+    const resizeObserver = new ResizeObserver(() => {
+      cancelAnimationFrame(refreshFrame);
+      refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    });
+    sectionRefs.current.forEach(section => { if (section) resizeObserver.observe(section); });
+
     return () => {
+      cancelAnimationFrame(refreshFrame);
+      resizeObserver.disconnect();
       triggers.forEach(t => t.kill());
     };
   }, []);
@@ -76,7 +86,8 @@ export default function App() {
       }
 
       gsap.to(window, {
-        duration: 1,
+        duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1,
+        overwrite: 'auto',
         scrollTo: { y: target, offsetY },
         ease: 'power3.inOut',
       });
