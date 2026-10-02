@@ -17,6 +17,7 @@
 .primary { background: var(--color-accent-bg); }
 .secondary { color: var(--color-text-muted); border-color: var(--color-border); }
 .primary:hover, .secondary:hover { border-color: var(--color-accent); background: var(--color-accent-bg); }
+.resumeButton { box-shadow: var(--glow-sm); font-weight: 600; }
 .resume { display: inline-block; padding: .5rem 0; color: var(--color-text-muted); font: .7rem var(--font-mono); text-underline-offset: .3em; }
 .resume:hover { color: var(--color-accent); }
 .responseBlock { min-width: 0; overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-xl); background: var(--color-surface); }

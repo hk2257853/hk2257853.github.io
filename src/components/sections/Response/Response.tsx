@@ -34,10 +34,10 @@ export const Response = forwardRef<HTMLElement>(function Response(_props, ref) {
             <h2 id="response-title">Let’s build<br />the next thing.</h2>
             <p>You’ve seen how I think and what I build. Have a backend, distributed systems, or AI engineering opportunity? Let’s talk.</p>
             <div className={styles.actions}>
-              <a href={'mailto:' + contact.email} className={styles.primary} data-umami-event="Email Click">Email me ↗</a>
+              <a href={import.meta.env.BASE_URL + contact.resumeUrl.replace(/^\//, '')} download className={`${styles.primary} ${styles.resumeButton}`} data-umami-event="Resume Download">↓ Download résumé</a>
+              <a href={'mailto:' + contact.email} className={styles.secondary} data-umami-event="Email Click">Email me ↗</a>
               <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className={styles.secondary} data-umami-event="LinkedIn Click">LinkedIn ↗</a>
             </div>
-            <a href={import.meta.env.BASE_URL + contact.resumeUrl.replace(/^\//, '')} download className={styles.resume} data-umami-event="Resume Download">↓ Download résumé</a>
           </div>
           <div className={styles.responseBlock}>
             <div className={styles.bar}><span className={styles.dot} /> Response <span>application/human</span></div>
