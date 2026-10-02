@@ -537,3 +537,12 @@
     font-size: 0.625rem;
   }
 }
+
+/* Keep the resting guide inside the outer page margin. */
+.pillComponent, .pillIcon { display: none; }
+.speechPill { min-height: 2.5rem; padding: .5rem .7rem; }
+.pillAction { font-size: .65rem; }
+@media (prefers-reduced-motion: reduce) {
+  .boardCard, .boardBody, .badgePulseDot, .avatarGlow, .chibiAvatarImg, .speechBubble, .speechBubbleCollapsed { animation: none; }
+  .mascotBoardWrapper, .collapsedWrapper { transition: none; }
+}
