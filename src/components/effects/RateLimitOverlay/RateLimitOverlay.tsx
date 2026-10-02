@@ -13,11 +13,11 @@ export function RateLimitOverlay() {
     const onWheel = (event: WheelEvent) => {
       if (triggered || event.ctrlKey || !event.isTrusted) return;
       const now = performance.now();
-      if (now - windowStart > 220) { windowStart = now; distance = 0; events = 0; }
+      if (now - windowStart > 650) { windowStart = now; distance = 0; events = 0; }
       const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
       distance += Math.abs(event.deltaY) * scale;
       events += 1;
-      if (events >= 3 && distance > 1600) {
+      if (events >= 2 && distance > 800) {
         triggered = true;
         setVisible(true);
         timeout = setTimeout(() => setVisible(false), 1500);
