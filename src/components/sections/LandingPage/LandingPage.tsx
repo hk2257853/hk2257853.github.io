@@ -40,11 +40,11 @@ export const LandingPage = forwardRef<HTMLElement>(function LandingPage(_props, 
     [...POINTS, POINTS[0]].forEach((point, i) => {
       timeline.to(packetRef.current, {
         // Every hop covers the same distance, so keep the speed uniform.
-        attr: { cx: point.x, cy: point.y }, duration: 0.85,
+        attr: { cx: point.x, cy: point.y }, duration: 0.5,
         ease: 'power1.inOut', onStart: () => setActiveNode(i % NODES.length),
       });
     });
-    timeline.to(packetRef.current, { opacity: 0, duration: 0.35 });
+    timeline.to(packetRef.current, { opacity: 0, duration: 0.2 });
   };
 
   return (
