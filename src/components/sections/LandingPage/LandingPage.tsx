@@ -39,11 +39,12 @@ export const LandingPage = forwardRef<HTMLElement>(function LandingPage(_props, 
     timeline.set(packetRef.current, { attr: { cx: 260, cy: 260 }, opacity: 1 });
     [...POINTS, POINTS[0]].forEach((point, i) => {
       timeline.to(packetRef.current, {
-        attr: { cx: point.x, cy: point.y }, duration: i === 0 ? 0.6 : 0.52,
+        // Give each hop enough time to follow comfortably by eye.
+        attr: { cx: point.x, cy: point.y }, duration: i === 0 ? 1.1 : 0.9,
         ease: 'power1.inOut', onStart: () => setActiveNode(i % NODES.length),
       });
     });
-    timeline.to(packetRef.current, { opacity: 0, duration: 0.3 });
+    timeline.to(packetRef.current, { opacity: 0, duration: 0.45 });
   };
 
   return (
