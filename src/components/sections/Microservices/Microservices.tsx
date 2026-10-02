@@ -56,7 +56,7 @@ export const Microservices = forwardRef<HTMLElement>(function Microservices(_pro
     }
   };
   const onKey = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    let next = index;
+    let next: number;
     if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % projects.length;
     else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + projects.length) % projects.length;
     else if (event.key === 'Home') next = 0;
