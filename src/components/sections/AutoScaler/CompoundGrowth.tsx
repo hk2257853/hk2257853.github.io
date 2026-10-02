@@ -1,25 +1,15 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback, useState, type CSSProperties } from 'react';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import styles from './CompoundGrowth.module.css';
-
-const SOURCES = [
-  'AI conversations',
-  'YouTube lectures',
-  'Side projects',
-  'Building connections',
-  'Reading papers',
-  'Debugging sessions',
-  'Peer discussions',
-  'Late-night tinkering',
+const SIZES = [120, 160, 205, 255];
+const FACE_SIZES = [46, 56, 68, 82];
+const FONTS = [26, 32, 40, 48];
+const STAGES = [
+  { title: 'Start with the fundamentals.', caption: 'Understand the system and its failure modes.', inputs: ['System design', 'Deep debugging'] },
+  { title: 'Build tools for the real workflow.', caption: 'Connect the IDE, database, and internal platform.', inputs: ['MCP tools', 'IDE workflows'] },
+  { title: 'Automate the repeatable work.', caption: 'Generate, evaluate, and review with intent.', inputs: ['Test automation', 'Human review'] },
+  { title: 'Make the saved time count.', caption: 'Example: API test authoring, 40 minutes → 10 minutes.', inputs: [] },
 ];
-
-const SIZES = [120, 160, 205, 255]; // core diameter per stage
-const FACE_SIZES = [46, 56, 68, 82]; // face width per stage
-const FONTS = [26, 32, 40, 48]; // label font-size per stage
-const LABELS = ['1x', '2x', '3x', '4x'];
-
-function rand(min: number, max: number): number {
-  return min + Math.random() * (max - min);
-}
 
 function FaceExpression({ stage }: { stage: number }) {
   if (stage === 0) {
@@ -119,305 +109,57 @@ function FaceExpression({ stage }: { stage: number }) {
 }
 
 export function CompoundGrowth() {
+  const reduced = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
-  const coreRef = useRef<HTMLDivElement>(null);
-  const coreLabelRef = useRef<HTMLDivElement>(null);
-  const coreFaceRef = useRef<HTMLDivElement>(null);
-  const ring1Ref = useRef<HTMLDivElement>(null);
-  const ring2Ref = useRef<HTMLDivElement>(null);
-  const captionRef = useRef<HTMLDivElement>(null);
-
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [stageIndex, setStageIndex] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const isRunningRef = useRef(false);
-  const isCancelledRef = useRef(false);
-  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const spawnedElementsRef = useRef<HTMLElement[]>([]);
-  const hasTriggeredRef = useRef(false);
-
-  const clearAllTimeouts = useCallback(() => {
-    timeoutsRef.current.forEach(clearTimeout);
-    timeoutsRef.current = [];
-  }, []);
-
-  const removeSpawnedElements = useCallback(() => {
-    spawnedElementsRef.current.forEach((el) => {
-      try {
-        el.remove();
-      } catch {
-        // Element may have already been removed
-      }
-    });
-    spawnedElementsRef.current = [];
-  }, []);
-
-  const pulseRing = useCallback((ring: HTMLDivElement | null, size: number, delayMs: number) => {
-    if (!ring) return;
-    const t = setTimeout(() => {
-      ring.style.width = '10px';
-      ring.style.height = '10px';
-      ring.style.opacity = '0.9';
-      ring.style.transition = 'none';
-      requestAnimationFrame(() => {
-        ring.style.transition = 'width 900ms ease-out, height 900ms ease-out, opacity 900ms ease-out';
-        ring.style.width = `${size}px`;
-        ring.style.height = `${size}px`;
-        ring.style.opacity = '0';
-      });
-    }, delayMs);
-    timeoutsRef.current.push(t);
-  }, []);
-
-  const flash = useCallback(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    const f = document.createElement('div');
-    f.className = styles.flash;
-    f.style.width = '10px';
-    f.style.height = '10px';
-    stage.appendChild(f);
-    spawnedElementsRef.current.push(f);
-
-    requestAnimationFrame(() => {
-      f.style.transition = 'transform 420ms ease-out, opacity 420ms ease-out';
-      f.style.transform = 'translate(-50%, -50%) scale(22)';
-      f.style.opacity = '0.9';
-    });
-
-    const t1 = setTimeout(() => {
-      f.style.opacity = '0';
-      const t2 = setTimeout(() => {
-        f.remove();
-        spawnedElementsRef.current = spawnedElementsRef.current.filter((el) => el !== f);
-      }, 300);
-      timeoutsRef.current.push(t2);
-    }, 120);
-    timeoutsRef.current.push(t1);
-  }, []);
-
-  const growTo = useCallback(
-    (idx: number) => {
-      const d = SIZES[idx];
-      if (coreRef.current) {
-        coreRef.current.style.width = `${d}px`;
-        coreRef.current.style.height = `${d}px`;
-        if (idx === 3) {
-          coreRef.current.classList.add(styles.maxStage);
-        } else {
-          coreRef.current.classList.remove(styles.maxStage);
-        }
-      }
-      if (coreLabelRef.current) {
-        coreLabelRef.current.style.fontSize = `${FONTS[idx]}px`;
-        coreLabelRef.current.textContent = LABELS[idx];
-      }
-      if (coreFaceRef.current) {
-        coreFaceRef.current.style.setProperty('--face-size', `${FACE_SIZES[idx]}px`);
-      }
-      setStageIndex(idx);
-      flash();
-    },
-    [flash]
-  );
-
-  const spawnParticle = useCallback(
-    (text: string, delay: number, duration: number, onArrive: (() => void) | null) => {
-      const stage = stageRef.current;
-      if (!stage) return;
-
-      const el = document.createElement('div');
-      el.className = styles.particle;
-      el.innerHTML = `<span class="${styles.dot}"></span><span>${text}</span>`;
-      stage.appendChild(el);
-      spawnedElementsRef.current.push(el);
-
-      const rect = stage.getBoundingClientRect();
-      const width = rect.width || 600;
-      const height = rect.height || 480;
-
-      // Random point on an ellipse around stage center, biased outward
-      const angle = rand(0, Math.PI * 2);
-      const rx = width * 0.5 * rand(0.72, 0.88);
-      const ry = height * 0.5 * rand(0.72, 0.88);
-      const startX = Math.cos(angle) * rx;
-      const startY = Math.sin(angle) * ry;
-
-      el.style.transform = `translate(calc(-50% + ${startX}px), calc(-50% + ${startY}px)) scale(1)`;
-      el.style.opacity = '0';
-
-      requestAnimationFrame(() => {
-        el.style.transition = `transform ${duration}ms cubic-bezier(.22,.7,.2,1), opacity ${duration * 0.35}ms ease`;
-        el.style.transitionDelay = `${delay}ms`;
-        requestAnimationFrame(() => {
-          el.style.opacity = '1';
-          el.style.transform = 'translate(-50%, -50%) scale(0.72)';
-        });
-      });
-
-      const t1 = setTimeout(() => {
-        el.style.transition = 'opacity 160ms ease';
-        el.style.opacity = '0';
-        if (onArrive) onArrive();
-        const t2 = setTimeout(() => {
-          el.remove();
-          spawnedElementsRef.current = spawnedElementsRef.current.filter((item) => item !== el);
-        }, 200);
-        timeoutsRef.current.push(t2);
-      }, delay + duration - 120);
-      timeoutsRef.current.push(t1);
-    },
-    []
-  );
-
-  const playSequence = useCallback(async () => {
-    if (isRunningRef.current) return;
-    isRunningRef.current = true;
-    setIsRunning(true);
-
-    clearAllTimeouts();
-    removeSpawnedElements();
-
-    // Reset core to 1x and sad face
-    if (coreRef.current) {
-      coreRef.current.style.width = '120px';
-      coreRef.current.style.height = '120px';
-      coreRef.current.classList.remove(styles.maxStage);
-    }
-    if (coreLabelRef.current) {
-      coreLabelRef.current.style.fontSize = `${FONTS[0]}px`;
-      coreLabelRef.current.textContent = LABELS[0];
-    }
-    if (coreFaceRef.current) {
-      coreFaceRef.current.style.setProperty('--face-size', `${FACE_SIZES[0]}px`);
-    }
+  const [running, setRunning] = useState(false);
+  const visibleStage = reduced ? 3 : stageIndex;
+  const clear = useCallback(() => { timers.current.forEach(clearTimeout); timers.current = []; }, []);
+  const play = useCallback(() => {
+    clear();
     setStageIndex(0);
-
-    if (captionRef.current) {
-      captionRef.current.style.opacity = '0';
-    }
-
-    const shuffled = [...SOURCES].sort(() => Math.random() - 0.5);
-    const perStage = 2; // particles feeding each level-up
-    let idx = 0;
-    const stageCount = 3; // 1x->2x->3x->4x = 3 transitions
-
-    for (let s = 0; s < stageCount; s++) {
-      if (isCancelledRef.current) break;
-
-      // Fire a batch of particles converging on the core
-      for (let p = 0; p < perStage; p++) {
-        const text = shuffled[idx % shuffled.length];
-        idx++;
-        const delay = p * 260 + rand(0, 120);
-        const duration = rand(900, 1250);
-        const isLast = p === perStage - 1;
-
-        spawnParticle(
-          text,
-          delay,
-          duration,
-          isLast
-            ? () => {
-                if (isCancelledRef.current) return;
-                growTo(s + 1);
-                pulseRing(ring1Ref.current, SIZES[s + 1] + 60, 0);
-                pulseRing(ring2Ref.current, SIZES[s + 1] + 120, 120);
-              }
-            : null
-        );
-      }
-
-      await new Promise<void>((resolve) => {
-        const t = setTimeout(resolve, perStage * 260 + 1250 + 250);
-        timeoutsRef.current.push(t);
-      });
-    }
-
-    if (!isCancelledRef.current && captionRef.current) {
-      captionRef.current.style.opacity = '1';
-    }
-
-    isRunningRef.current = false;
-    setIsRunning(false);
-  }, [clearAllTimeouts, removeSpawnedElements, spawnParticle, growTo, pulseRing]);
-
-  // Trigger when entering viewport (or on mount if visible)
+    setRunning(true);
+    timers.current = [
+      setTimeout(() => setStageIndex(1), 1400),
+      setTimeout(() => setStageIndex(2), 2800),
+      setTimeout(() => setStageIndex(3), 4200),
+      setTimeout(() => setRunning(false), 4800),
+    ];
+  }, [clear]);
   useEffect(() => {
-    isCancelledRef.current = false;
-
-    const stageEl = stageRef.current;
-    if (!stageEl) return;
-
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && !hasTriggeredRef.current) {
-              hasTriggeredRef.current = true;
-              playSequence();
-            }
-          });
-        },
-        { threshold: 0.25 }
-      );
-
-      observer.observe(stageEl);
-
-      return () => {
+    if (reduced || !stageRef.current) return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        play();
         observer.disconnect();
-        isCancelledRef.current = true;
-        clearAllTimeouts();
-        removeSpawnedElements();
-      };
-    } else {
-      const t = setTimeout(() => {
-        playSequence();
-      }, 400);
-      timeoutsRef.current.push(t);
-
-      return () => {
-        isCancelledRef.current = true;
-        clearAllTimeouts();
-        removeSpawnedElements();
-      };
-    }
-  }, [playSequence, clearAllTimeouts, removeSpawnedElements]);
-
+      }
+    }, { threshold: .45 });
+    observer.observe(stageRef.current);
+    return () => { observer.disconnect(); clear(); };
+  }, [clear, play, reduced]);
+  const stage = STAGES[visibleStage];
   return (
-    <div id="stage" className={styles.stage} ref={stageRef}>
-      <button
-        id="replay"
-        className={styles.replay}
-        onClick={playSequence}
-        disabled={isRunning}
-        title={isRunning ? 'Compounding in progress...' : 'Replay compounding growth'}
-        data-umami-event="Replay 1x to 4x Growth"
-      >
-        Replay
-      </button>
-
-      <div className={styles.coreWrap} id="coreWrap">
-        <div className={styles.ring} id="ring1" ref={ring1Ref} />
-        <div className={styles.ring} id="ring2" ref={ring2Ref} />
-        <div className={styles.core} id="core" ref={coreRef}>
+    <div className={styles.stage} ref={stageRef}>
+      <span className={styles.stageLabel}>One engineer. Compounding capability.</span>
+      {!reduced && <button className={styles.replay} onClick={play} disabled={running} data-umami-event="Replay 1x to 4x Growth">Replay ↺</button>}
+      <div className={styles.coreWrap}>
+        <div className={styles.core + (visibleStage === 3 ? ' ' + styles.maxStage : '')}
+          style={{ width: SIZES[visibleStage], height: SIZES[visibleStage] }} aria-hidden="true">
           <div className={styles.coreContent}>
-            <div
-              className={styles.coreFace}
-              ref={coreFaceRef}
-              style={{ '--face-size': `${FACE_SIZES[stageIndex]}px` } as React.CSSProperties}
-            >
-              <FaceExpression stage={stageIndex} />
+            <div className={styles.coreFace} style={{ '--face-size': FACE_SIZES[visibleStage] + 'px' } as CSSProperties}>
+              <FaceExpression stage={visibleStage} />
             </div>
-            <div className={styles.coreLabel} id="coreLabel" ref={coreLabelRef}>
-              {LABELS[stageIndex]}
-            </div>
+            <div className={styles.coreLabel} style={{ fontSize: FONTS[visibleStage] }}>{visibleStage + 1}x</div>
           </div>
         </div>
       </div>
-
-      <div id="caption" className={styles.caption} ref={captionRef}>
-        every input compounds into the same skill
-      </div>
+      {running && !reduced && visibleStage < 3 && <div key={visibleStage} className={styles.inputs} aria-hidden="true">
+        {stage.inputs.map((input, index) => <span key={input} className={styles.input} style={{ '--side': index === 0 ? -1 : 1 } as CSSProperties}><i />{input}</span>)}
+      </div>}
+      <div className={styles.progress} aria-hidden="true">{STAGES.map((_, i) => <span key={i} className={i <= visibleStage ? styles.reached : ''} />)}</div>
+      <div className={styles.caption} role="status"><strong>{stage.title}</strong><span>{stage.caption}</span></div>
     </div>
   );
 }
+
